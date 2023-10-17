@@ -1,6 +1,9 @@
 package com.example.graphgrader;
 
 import com.example.graphgrader.Graaf.*;
+import com.example.graphgrader.Hindaja.Algoritm;
+import com.example.graphgrader.Hindaja.Hindaja;
+import com.example.graphgrader.Hindaja.Lahendaja;
 import com.example.graphgrader.Hindaja.Tegevus;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -20,9 +23,7 @@ public class LaiutiLäbimine {
     private final double tipuSuurus = 30;
     public Label tulemusVal = new Label("0");
     private List<Tegevus> tegevused = new ArrayList<>();
-    private List<Tegevus> oiged = new ArrayList<>();
     private Map<Tipp, TippGraafil> tipud = new HashMap<>();
-
     private Graaf graaf1;
 
     public void showGraph(MouseEvent mouseEvent) throws IOException {
@@ -32,9 +33,10 @@ public class LaiutiLäbimine {
         jarjekord.getChildren().remove(0, jarjekord.getChildren().size());
         tulemusVal.setText("0");
         graaf.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.MEDIUM)));
+
+
         String failitee = "test1.txt";
         this.graaf1 = new Graaf(failitee);
-        this.oiged = lahenda(graaf1);
 
         Tipp algus = graaf1.tipud.get(0);
         TippGraafil tippGraafil = new TippGraafil(40,40, tipuSuurus, algus);
@@ -88,7 +90,8 @@ public class LaiutiLäbimine {
     }
 
     public void CheckSolution(MouseEvent event) {
-        double tulemus = kontrolli();
+        Hindaja hindaja = new Hindaja(Algoritm.LAIUTI_LÄBIMINE, tegevused, graaf1);
+        double tulemus = hindaja.hinda();
         this.tulemusVal.setText(String.valueOf(tulemus * 100) + "%");
     }
 
@@ -130,50 +133,6 @@ public class LaiutiLäbimine {
             nooled.add(arrow);
         }
         graaf.getChildren().addAll(nooled);
-    }
-
-    public double kontrolli() {
-        List<Tegevus> oiged = this.oiged;
-        List<Tegevus> tehtud = this.tegevused;
-
-        int valed = 0;
-        for (int i = 0; i < Math.min(tehtud.size(), oiged.size()); i++) {
-            if (!oiged.get(i).eq(tehtud.get(i))) {
-                valed++;
-            }
-        }
-
-        return 1.0 - (1.0 * valed / oiged.size());
-    }
-
-    public List<Tegevus> lahenda(Graaf g) {
-        List<Tegevus> tegevused = new ArrayList<>();
-
-        Deque<Tipp> ootel = new ArrayDeque<>();
-        List<Tipp> toodeldud = new ArrayList<>();
-
-
-        for (Tipp tipp : g.tipud.get(0).alluvad) {
-            ootel.add(tipp);
-            tegevused.add(new Tegevus(Tegevus.Voimalus.LISA_JARJEKORDA, tipp));
-        }
-
-        tegevused.add(new Tegevus(Tegevus.Voimalus.TOODELDUD, g.tipud.get(0)));
-        toodeldud.add(g.tipud.get(0));
-
-        while (!ootel.isEmpty()) {
-            Tipp praegune = ootel.pop();
-            tegevused.add(new Tegevus(Tegevus.Voimalus.EEMALDA_JARJEKORRAST, praegune));
-            if (toodeldud.contains(praegune)) continue;
-            for (Kaar kaar : praegune.kaared) {
-                ootel.push(kaar.lopp);
-                tegevused.add(new Tegevus(Tegevus.Voimalus.LISA_JARJEKORDA, kaar.lopp));
-            }
-            tegevused.add(new Tegevus(Tegevus.Voimalus.TOODELDUD, praegune));
-            toodeldud.add(praegune);
-        }
-
-        return tegevused;
     }
 
     public void removeStep() {

@@ -8,7 +8,10 @@ public class Tegevus {
     public Voimalus v;
     public Tipp t;
     public enum Voimalus {
-        LISA_JARJEKORDA, EEMALDA_JARJEKORRAST, TOODELDUD
+        LISA_JARJEKORDA, EEMALDA_JARJEKORRAST,
+        LISA_MAGASINI, EEMALDA_MAGASINIST,
+        TOODELDUD
+
     }
 
     public Tegevus(Voimalus v, Tipp t) {
