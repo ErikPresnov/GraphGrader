@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -21,17 +22,16 @@ public class LaiutiLäbimine {
     public HBox toodeldud;
     private final double tipuSuurus = 30;
     public Label tulemusVal = new Label("0");
+    public Pane kollaneV;
+    public Pane rohelineV;
+    public Pane punaneV;
+    public Pane valgeV;
     private List<Tegevus> tegevused = new ArrayList<>();
     private Map<Tipp, TippGraafil> tipud = new HashMap<>();
     private Graaf graaf1;
 
     public void showGraph(MouseEvent mouseEvent) throws IOException {
-        graaf.getChildren().remove(0, graaf.getChildren().size());
-        tegevused.clear();
-        toodeldud.getChildren().remove(0, toodeldud.getChildren().size());
-        jarjekord.getChildren().remove(0, jarjekord.getChildren().size());
-        tulemusVal.setText("0");
-        graaf.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.MEDIUM)));
+        taastaAlgus();
 
         String failitee = "test1.txt";
         this.graaf1 = new Graaf(failitee);
@@ -52,6 +52,27 @@ public class LaiutiLäbimine {
         }
 
         reload(graaf1);
+    }
+
+    public void taastaAlgus() {
+        graaf.getChildren().remove(0, graaf.getChildren().size());
+        tegevused.clear();
+        toodeldud.getChildren().remove(0, toodeldud.getChildren().size());
+        jarjekord.getChildren().remove(0, jarjekord.getChildren().size());
+        tulemusVal.setText("0");
+        graaf.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.MEDIUM)));
+
+        Rectangle kollane = new Rectangle(30, 30, Color.YELLOW);
+        kollaneV.getChildren().add(kollane);
+
+        Rectangle roheline = new Rectangle(30, 30, Color.GREEN);
+        rohelineV.getChildren().add(roheline);
+
+        Rectangle punane = new Rectangle(30, 30, Color.RED);
+        punaneV.getChildren().add(punane);
+
+        Rectangle valge = new Rectangle(30, 30, Color.WHITE);
+        valgeV.getChildren().add(valge);
     }
 
     public void CheckSolution(MouseEvent event) {

@@ -119,7 +119,6 @@ public class Lahendaja {
         Kuhi kuhi = new Kuhi();
         List<Tipp> toodeldud = new ArrayList<>();
 
-
         return null;
     }
 
