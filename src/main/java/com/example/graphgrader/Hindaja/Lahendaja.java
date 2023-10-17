@@ -79,13 +79,47 @@ public class Lahendaja {
         return tegevused;
     }
 
-    // TODO
     public static List<Tegevus> sygavutiLopp(Graaf g) {
-        return null;
+        List<Tegevus> tegevused = new ArrayList<>();
+
+        Deque<Tipp> ootel = new ArrayDeque<>();
+        List<Tipp> toodeldud = new ArrayList<>();
+
+        for (int i = 0; i < g.tipud.get(0).kaared.size(); i++) {
+            Tipp tipp = g.tipud.get(0).kaared.get(i).lopp;
+            ootel.push(tipp);
+            tegevused.add(new Tegevus(Tegevus.Voimalus.LISA_MAGASINI, tipp));
+        }
+
+        toodeldud.add(g.tipud.get(0));
+        tegevused.add(new Tegevus(Tegevus.Voimalus.TOODELDUD, g.tipud.get(0)));
+
+        while (!ootel.isEmpty()) {
+            Tipp praegune = ootel.pop();
+            tegevused.add(new Tegevus(Tegevus.Voimalus.EEMALDA_MAGASINIST, praegune));
+            if (toodeldud.contains(praegune)) continue;
+
+            for (int i = 0; i < g.tipud.get(0).kaared.size(); i++) {
+                Tipp uus = praegune.kaared.get(i).lopp;
+                ootel.push(uus);
+                tegevused.add(new Tegevus(Tegevus.Voimalus.LISA_MAGASINI, uus));
+            }
+
+            toodeldud.add(praegune);
+            tegevused.add(new Tegevus(Tegevus.Voimalus.TOODELDUD, praegune));
+        }
+
+        return tegevused;
     }
 
     // TODO
     public static List<Tegevus> prim(Graaf g) {
+        List<Tegevus> tegevused = new ArrayList<>();
+
+        Kuhi kuhi = new Kuhi();
+        List<Tipp> toodeldud = new ArrayList<>();
+
+
         return null;
     }
 

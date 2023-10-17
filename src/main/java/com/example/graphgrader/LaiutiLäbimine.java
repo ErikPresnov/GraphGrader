@@ -3,7 +3,6 @@ package com.example.graphgrader;
 import com.example.graphgrader.Graaf.*;
 import com.example.graphgrader.Hindaja.Algoritm;
 import com.example.graphgrader.Hindaja.Hindaja;
-import com.example.graphgrader.Hindaja.Lahendaja;
 import com.example.graphgrader.Hindaja.Tegevus;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -34,55 +33,21 @@ public class LaiutiLäbimine {
         tulemusVal.setText("0");
         graaf.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.MEDIUM)));
 
-
         String failitee = "test1.txt";
         this.graaf1 = new Graaf(failitee);
 
-        Tipp algus = graaf1.tipud.get(0);
-        TippGraafil tippGraafil = new TippGraafil(40,40, tipuSuurus, algus);
-        tipud.put(algus, tippGraafil);
-        tippGraafil.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            tippGraafil.setToodeldud();
-            tegevused.add(new Tegevus(Tegevus.Voimalus.TOODELDUD, algus));
-            toodeldud.getChildren().add(new Text(algus.tähis + " "));
-        });
-        algus.tippGraafil = tippGraafil;
-        tippGraafil.setFill(Color.RED);
-        Text text = new Text(algus.tähis + "");
-        Group grupp = new Group(tippGraafil, text);
-        grupp.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
-            if (e.getX() < graaf.getLayoutX() + 25 || e.getX() > graaf.getLayoutX() + graaf.getWidth() - 35) return;
-            if (e.getY() < 30 || e.getY() > graaf.getHeight() - 30) return;
-            tippGraafil.setCenterX(e.getX());
-            tippGraafil.setCenterY(e.getY());
-            text.setX(e.getX() - 3);
-            text.setY(e.getY() + 3);
-            reload(graaf1);
-        });
-
-        graaf.getChildren().add(grupp);
-        for (int i = 1; i < graaf1.tipud.size(); i++) {
+        for (int i = 0; i < graaf1.tipud.size(); i++) {
             Tipp tipp = graaf1.tipud.get(i);
-            TippGraafil tippGraafil1 = new TippGraafil(40,40, tipuSuurus, tipp);
-            tipud.put(tipp, tippGraafil1);
-            tippGraafil1.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-                tippGraafil1.setToodeldud();
-                tegevused.add(new Tegevus(Tegevus.Voimalus.TOODELDUD, tipp));
-                toodeldud.getChildren().add(new Text(tipp.tähis + " "));
-            });
-            tipp.tippGraafil = tippGraafil1;
-            tippGraafil1.setFill(Color.WHITE);
+            TippGraafil tippGraafil = new TippGraafil(40,40, tipuSuurus, tipp);
+            tipud.put(tipp, tippGraafil);
+            tippGraafil = addTippGraafilHander(tippGraafil, tipp);
+            tipp.tippGraafil = tippGraafil;
+            if (i == 0)
+                tippGraafil.setFill(Color.RED);
+            else
+                tippGraafil.setFill(Color.WHITE);
             Text text1 = new Text(tipp.tähis + "");
-            Group grupp1 = new Group(tippGraafil1, text1);
-            grupp1.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
-                if (e.getX() < graaf.getLayoutX() + 25 || e.getX() > graaf.getLayoutX() + graaf.getWidth() - 35) return;
-                if (e.getY() < 30 || e.getY() > graaf.getHeight() - 30) return;
-                tippGraafil1.setCenterX(e.getX());
-                tippGraafil1.setCenterY(e.getY());
-                text1.setX(e.getX() - 3);
-                text1.setY(e.getY() + 3);
-                reload(graaf1);
-            });
+            Group grupp1 = makeGroup(tippGraafil, text1);
             graaf.getChildren().add(grupp1);
         }
 
@@ -92,7 +57,7 @@ public class LaiutiLäbimine {
     public void CheckSolution(MouseEvent event) {
         Hindaja hindaja = new Hindaja(Algoritm.LAIUTI_LÄBIMINE, tegevused, graaf1);
         double tulemus = hindaja.hinda();
-        this.tulemusVal.setText(String.valueOf(tulemus * 100) + "%");
+        this.tulemusVal.setText(tulemus * 100 + "%");
     }
 
     public void reload(Graaf g) {
@@ -102,34 +67,14 @@ public class LaiutiLäbimine {
             Tipp algus = kaar.algus;
             Tipp lopp = kaar.lopp;
             Arrow arrow = new Arrow(
-                    algus.tippGraafil.getCenterX(),
-                    algus.tippGraafil.getCenterY(),
-                    lopp.tippGraafil.getCenterX(),
-                    lopp.tippGraafil.getCenterY(),
+                    algus.tippGraafil.getCenterX(), algus.tippGraafil.getCenterY(),
+                    lopp.tippGraafil.getCenterX(), lopp.tippGraafil.getCenterY(),
                     20
             );
 
             Text text = new Text("  { " + algus.tähis + " -> " + lopp.tähis + " }  ");
-            text.setOnMouseClicked(e -> {
-                Tipp otsitav = null;
-                String s = text.getText().replace("{", "").replace("}", "").replace(" ", "");
-                for (Tipp tipp : g.tipud) {
-                    if (String.valueOf(tipp.tähis).equals(s.split("->")[1])) {
-                        otsitav = tipp;
-                        break;
-                    }
-                }
-                TippGraafil t = tipud.get(otsitav);
-                if (t.getFill() != Color.GREEN)
-                    t.setPraegune();
-                jarjekord.getChildren().remove(e.getSource());
-                tegevused.add(new Tegevus(Tegevus.Voimalus.EEMALDA_JARJEKORRAST, lopp));
-            });
-            arrow.setOnMouseClicked(e -> {
-                tegevused.add(new Tegevus(Tegevus.Voimalus.LISA_JARJEKORDA, lopp));
-                tipud.get(lopp).setJarjekorras();
-                jarjekord.getChildren().add(text);
-            });
+            text = addTextHander(text, g, lopp);
+            arrow = addArrowHander(arrow, text, lopp);
             nooled.add(arrow);
         }
         graaf.getChildren().addAll(nooled);
@@ -165,5 +110,56 @@ public class LaiutiLäbimine {
                 toodeldud.getChildren().remove(toodeldud.getChildren().size() - 1);
             }
         }
+    }
+
+    public Text addTextHander(Text text, Graaf g, Tipp lopp) {
+        text.setOnMouseClicked(e -> {
+            Tipp otsitav = null;
+            String s = text.getText().replace("{", "").replace("}", "").replace(" ", "");
+            for (Tipp tipp : g.tipud) {
+                if (String.valueOf(tipp.tähis).equals(s.split("->")[1])) {
+                    otsitav = tipp;
+                    break;
+                }
+            }
+            TippGraafil t = tipud.get(otsitav);
+            if (t.getFill() != Color.GREEN)
+                t.setPraegune();
+            jarjekord.getChildren().remove(e.getSource());
+            tegevused.add(new Tegevus(Tegevus.Voimalus.EEMALDA_JARJEKORRAST, lopp));
+        });
+        return text;
+    }
+
+    public Arrow addArrowHander(Arrow arrow, Text text, Tipp lopp) {
+        arrow.setOnMouseClicked(e -> {
+            tegevused.add(new Tegevus(Tegevus.Voimalus.LISA_JARJEKORDA, lopp));
+            tipud.get(lopp).setJarjekorras();
+            jarjekord.getChildren().add(text);
+        });
+        return arrow;
+    }
+
+    public TippGraafil addTippGraafilHander(TippGraafil t, Tipp tipp) {
+        t.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            t.setToodeldud();
+            tegevused.add(new Tegevus(Tegevus.Voimalus.TOODELDUD, tipp));
+            toodeldud.getChildren().add(new Text(tipp.tähis + " "));
+        });
+        return t;
+    }
+
+    public Group makeGroup(TippGraafil tipp, Text text) {
+        Group g = new Group(tipp, text);
+        g.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
+            if (e.getX() < graaf.getLayoutX() + 25 || e.getX() > graaf.getLayoutX() + graaf.getWidth() - 35) return;
+            if (e.getY() < 30 || e.getY() > graaf.getHeight() - 30) return;
+            tipp.setCenterX(e.getX());
+            tipp.setCenterY(e.getY());
+            text.setX(e.getX() - 3);
+            text.setY(e.getY() + 3);
+            reload(graaf1);
+        });
+        return g;
     }
 }

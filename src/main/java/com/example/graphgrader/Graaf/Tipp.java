@@ -6,7 +6,6 @@ import java.util.List;
 public class Tipp {
     public char tähis;
     public TippGraafil tippGraafil;
-
     public List<Tipp> alluvad = new ArrayList<>();
     public List<Kaar> kaared = new ArrayList<>();
     public int index;
