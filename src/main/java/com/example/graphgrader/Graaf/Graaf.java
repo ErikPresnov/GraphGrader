@@ -41,6 +41,11 @@ public class Graaf {
         this.kaared = kaared;
     }
 
+    public Graaf(List<Tipp> tipud, List<Kaar> kaared) {
+        this.tipud = tipud;
+        this.kaared = kaared;
+    }
+
     private static List<String> loeFail(String failitee) throws IOException {
         List<String> read = Files.readAllLines(Path.of(failitee));
         List<String> tagastus = new ArrayList<>();

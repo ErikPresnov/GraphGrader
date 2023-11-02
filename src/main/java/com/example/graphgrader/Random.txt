@@ -1,0 +1,11 @@
+Algoritm        Päis        Sisu
+Laiuti          Järjekord   Kaaludeta
+Sügavuti(E)     Magasin     Kaaludeta
+Sügavuti(L)     Magasin     Kaaludeta
+Prim            Kuhi        Kaaludega serv
+Kruskal         Kuhi        Kaaludega serv
+Dijkstra        Kuhi        Kaaludega serv
+FW              Puudub      Kaaludega serv PÄISE ASEMEL MAATRIKS?
+Top.sort        SÜGAVUTI LÕPPJÄRJESTUS
+Kahn            Map/Kuhi?   Kaaludeta
+Eeldusgraaf     Map?        Kaaludega tipp  Kriitilised teed?

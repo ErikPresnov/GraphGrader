@@ -1,6 +1,5 @@
 package com.example.graphgrader.Graaf;
 
-import com.example.graphgrader.Hindaja.Tegevus;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;

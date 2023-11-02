@@ -11,8 +11,11 @@ public class Lahendaja {
     public static List<Tegevus> lahenda(Algoritm a, Graaf g) {
         List<Tegevus> tagastus = new ArrayList<>();
         switch (a) {
-            case LAIUTI_LÄBIMINE -> tagastus = laiuti(g);
-            case SYGAVUTI_EES -> tagastus = sygavutiEes(g);
+            case LAIUTI_LÄBIMINE ->
+                tagastus = laiuti(g);
+            case SYGAVUTI_EES ->
+                tagastus = sygavutiEes(g);
+
         }
         return tagastus;
     }

@@ -1,1 +1,2 @@
-"#Graph grader for A&A" 
+# Läbimängija/hindaja graafi algoritmidele (A&A)
+

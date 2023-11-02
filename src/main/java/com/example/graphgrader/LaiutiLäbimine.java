@@ -1,5 +1,6 @@
 package com.example.graphgrader;
 
+import com.example.graphgrader.Generator.Generator;
 import com.example.graphgrader.Graaf.*;
 import com.example.graphgrader.Hindaja.Algoritm;
 import com.example.graphgrader.Hindaja.Hindaja;
@@ -33,8 +34,9 @@ public class LaiutiLäbimine {
     public void showGraph(MouseEvent mouseEvent) throws IOException {
         taastaAlgus();
 
-        String failitee = "test1.txt";
-        this.graaf1 = new Graaf(failitee);
+        //String failitee = "test1.txt";
+        //this.graaf1 = new Graaf(failitee);
+        this.graaf1 = new Generator().getG();
 
         for (int i = 0; i < graaf1.tipud.size(); i++) {
             Tipp tipp = graaf1.tipud.get(i);

@@ -22,6 +22,14 @@ public class Hindaja {
             }
         }
 
+        for (Tegevus tegevus : tehtud)
+            System.out.println(tegevus);
+
+        System.out.println();
+        for (Tegevus tegevus : õiged)
+            System.out.println(tegevus);
+
+
         return 1.0 - (1.0 * valed / õiged.size());
     }
 }
