@@ -11,6 +11,8 @@ import javafx.scene.shape.Path;
  */
 public class Arrow extends Path {
     private static final double defaultArrowHeadSize = 10.0;
+    public double midX;
+    public double midY;
 
     public Arrow(double startX, double startY, double endX, double endY, double arrowHeadSize){
         super();
@@ -49,9 +51,46 @@ public class Arrow extends Path {
         getElements().add(new LineTo(x1, y1));
         getElements().add(new LineTo(x2, y2));
         getElements().add(new LineTo(endX, endY));
+
+        midX = startX;
+        if (startX < endX) midX += Math.abs(startX - endX)/2;
+        else midX -= Math.abs(startX - endX)/2;
+
+        midY = startY;
+        if (startY < endY) midY += Math.abs(startY - endY)/2;
+        else midY -= Math.abs(startY - endY)/2;
     }
 
     public Arrow(double startX, double startY, double endX, double endY){
-        this(startX, startY, endX, endY, defaultArrowHeadSize);
+        super();
+        strokeProperty().bind(fillProperty());
+        setFill(Color.DARKGREY);
+
+        double angle = Math.atan2((endY - startY), (endX - startX));
+        double sin = Math.sin(angle);
+        double cos = Math.cos(angle);
+        int n = 37;
+
+        startX += n*cos;
+        startY += n*sin;
+
+        double angle2 = angle - Math.PI;
+        double sin2 = Math.sin(angle2);
+        double cos2 = Math.cos(angle2);
+
+        endX += n*cos2;
+        endY += n*sin2;
+
+        //Line
+        getElements().add(new MoveTo(startX, startY));
+        getElements().add(new LineTo(endX, endY));
+
+        midX = startX;
+        if (startX < endX) midX += Math.abs(startX - endX)/2;
+        else midX -= Math.abs(startX - endX)/2;
+
+        midY = startY;
+        if (startY < endY) midY += Math.abs(startY - endY)/2;
+        else midY -= Math.abs(startY - endY)/2;
     }
 }

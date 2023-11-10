@@ -6,6 +6,20 @@ Prim            Kuhi        Kaaludega serv
 Kruskal         Kuhi        Kaaludega serv
 Dijkstra        Kuhi        Kaaludega serv
 FW              Puudub      Kaaludega serv PÄISE ASEMEL MAATRIKS?
-Top.sort        SÜGAVUTI LÕPPJÄRJESTUS
 Kahn            Map/Kuhi?   Kaaludeta
-Eeldusgraaf     Map?        Kaaludega tipp  Kriitilised teed?
+Eeldusgraaf     Map?        Kaaludega tipp Vajab alustuseks top. sorti? Kriitilised teed?
+Top.sort        TAGURPIDI SÜGAVUTI LÕPPJÄRJESTUS
+
+
+Genereerimine       P
+Laiuti              Tippude kordused järjekorras / valikute (igas tipus) summa
+Sügavuti(E)         Tippude kordused magasinis
+Sügavuti(L)         Tippude kordused magasinis
+Prim(vali tippe)    Tsükli tekkimise võimalused
+Kruskal(vali servi) Tsükli tekkimise võimalused
+Dijkstra            UHArismaa
+FW                  UHArismaa
+Kahn                UHArismaa
+BelmannFord         UHArismaa
+Eeldusgraaf
+Top.sort

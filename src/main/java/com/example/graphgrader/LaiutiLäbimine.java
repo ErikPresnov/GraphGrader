@@ -36,7 +36,7 @@ public class LaiutiLäbimine {
 
         //String failitee = "test1.txt";
         //this.graaf1 = new Graaf(failitee);
-        this.graaf1 = new Generator().getG();
+        this.graaf1 = new Generator("prim").getG();
 
         for (int i = 0; i < graaf1.tipud.size(); i++) {
             Tipp tipp = graaf1.tipud.get(i);
@@ -85,15 +85,22 @@ public class LaiutiLäbimine {
 
     public void reload(Graaf g) {
         graaf.getChildren().removeIf(e -> e instanceof Arrow);
+        graaf.getChildren().removeIf(e -> e instanceof Text);
         List<Arrow> nooled = new ArrayList<>();
+        List<Text> kaalud = new ArrayList<>();
         for (Kaar kaar : g.kaared) {
             Tipp algus = kaar.algus;
             Tipp lopp = kaar.lopp;
             Arrow arrow = new Arrow(
                     algus.tippGraafil.getCenterX(), algus.tippGraafil.getCenterY(),
-                    lopp.tippGraafil.getCenterX(), lopp.tippGraafil.getCenterY(),
-                    20
+                    lopp.tippGraafil.getCenterX(), lopp.tippGraafil.getCenterY()
             );
+            double midX = arrow.midX;
+            double midY = arrow.midY;
+            Text kaaluText = new Text(String.valueOf(kaar.kaal));
+            kaaluText.setX(midX);
+            kaaluText.setY(midY);
+            kaalud.add(kaaluText);
 
             Text text = new Text("  { " + algus.tähis + " -> " + lopp.tähis + " }  ");
             text = addTextHander(text, g, lopp);
@@ -101,6 +108,7 @@ public class LaiutiLäbimine {
             nooled.add(arrow);
         }
         graaf.getChildren().addAll(nooled);
+        graaf.getChildren().addAll(kaalud);
     }
 
     public void removeStep() {
