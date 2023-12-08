@@ -36,6 +36,6 @@ public class LaiutiGraaf {
             tipud.get(e).kaared.add(k);
         }
 
-        return new Graaf(tipud, kaared);
+        return new Graaf(tipud);
     }
 }

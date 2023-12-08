@@ -37,6 +37,6 @@ public class Prim {
         }
 
 
-        return new Graaf(tipud, kaared);
+        return new Graaf(tipud);
     }
 }

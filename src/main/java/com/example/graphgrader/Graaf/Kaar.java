@@ -4,6 +4,14 @@ public class Kaar {
     public Tipp algus;
     public Tipp lopp;
     public int kaal;
+    public Kaar jargmine;
+
+    public Kaar(Tipp algus, Tipp lopp, int kaal, Kaar kaar) {
+        this.algus = algus;
+        this.lopp = lopp;
+        this.kaal = kaal;
+        this.jargmine = kaar;
+    }
 
     public Kaar(Tipp algus, Tipp lopp, int kaal) {
         this.algus = algus;
@@ -14,6 +22,6 @@ public class Kaar {
     public Kaar(Tipp algus, Tipp lopp) {
         this.algus = algus;
         this.lopp = lopp;
-        this.kaal = 0;
     }
+
 }

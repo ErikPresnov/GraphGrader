@@ -9,13 +9,11 @@ import java.util.Objects;
 
 public class Graaf {
     public List<Tipp> tipud;
-    public List<Kaar> kaared;
 
     public Graaf(String failitee) throws IOException {
         List<String> graaf = loeFail(failitee);
 
         List<Tipp> tipud = new ArrayList<>();
-        List<Kaar> kaared = new ArrayList<>();
 
         String[] esimene = graaf.get(0).split(" ");
 
@@ -34,16 +32,13 @@ public class Graaf {
             algus.lisaAlluv(loppT);
             Kaar kaar = new Kaar(algus, loppT);
             algus.kaared.add(kaar);
-            kaared.add(kaar);
         }
 
         this.tipud = tipud;
-        this.kaared = kaared;
     }
 
-    public Graaf(List<Tipp> tipud, List<Kaar> kaared) {
+    public Graaf(List<Tipp> tipud) {
         this.tipud = tipud;
-        this.kaared = kaared;
     }
 
     private static List<String> loeFail(String failitee) throws IOException {

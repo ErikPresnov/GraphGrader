@@ -12,7 +12,7 @@ Top.sort        TAGURPIDI SÜGAVUTI LÕPPJÄRJESTUS
 
 
 Genereerimine       P
-Laiuti              Tippude kordused järjekorras / valikute (igas tipus) summa
+Laiuti              Tippude kordused järjekorras
 Sügavuti(E)         Tippude kordused magasinis
 Sügavuti(L)         Tippude kordused magasinis
 Prim(vali tippe)    Tsükli tekkimise võimalused
