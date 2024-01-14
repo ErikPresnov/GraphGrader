@@ -9,6 +9,7 @@ import java.util.Objects;
 
 public class Graaf {
     public List<Tipp> tipud;
+    public boolean kaalutud;
 
     public Graaf(String failitee) throws IOException {
         List<String> graaf = loeFail(failitee);
@@ -35,6 +36,7 @@ public class Graaf {
         }
 
         this.tipud = tipud;
+        this.kaalutud = tipud.get(0).kaared.get(0).kaal != 0;
     }
 
     public Graaf(List<Tipp> tipud) {

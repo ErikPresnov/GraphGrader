@@ -5,7 +5,6 @@ import com.example.graphgrader.Hindaja.Algoritm;
 import com.example.graphgrader.Hindaja.Hindaja;
 import com.example.graphgrader.Hindaja.Tegevus;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -26,14 +25,11 @@ public class LaiutiLäbimine {
     private List<Tegevus> tegevused = new ArrayList<>();
     private Graaf graaf;
     private HashMap<TippGraafil, Group> map = new HashMap<>();
-    private boolean graafOlemas = false;
 
     public void showGraph(MouseEvent mouseEvent) throws IOException {
         taastaAlgus();
         String failitee = "test1.txt";
         this.graaf = new Graaf(failitee);
-        this.graafOlemas = true;
-
         for (int i = 0; i < graaf.tipud.size(); i++) {
             Tipp tipp = graaf.tipud.get(i);
             TippGraafil tippGraafil = new TippGraafil(40,40, tipuSuurus, tipp);
@@ -80,12 +76,14 @@ public class LaiutiLäbimine {
                         lopp.tippGraafil.getCenterX(), lopp.tippGraafil.getCenterY(),
                         true
                 );
-                double midX = arrow.midX;
-                double midY = arrow.midY;
-                Text kaaluText = new Text(String.valueOf(kaar.kaal));
-                kaaluText.setX(midX);
-                kaaluText.setY(midY);
-                kaalud.add(kaaluText);
+                if (graaf.kaalutud) {
+                    double midX = arrow.midX;
+                    double midY = arrow.midY;
+                    Text kaaluText = new Text(String.valueOf(kaar.kaal));
+                    kaaluText.setX(midX);
+                    kaaluText.setY(midY);
+                    kaalud.add(kaaluText);
+                }
 
                 Text text = new Text("  { " + algus.tähis + " -> " + lopp.tähis + " }  ");
                 text = addTextHander(text, g, lopp);
@@ -142,7 +140,6 @@ public class LaiutiLäbimine {
                     break;
                 }
             }
-            //TippGraafil t = tipud.get(otsitav);
             TippGraafil t = otsitav.tippGraafil;
             if (t.getFill() != Color.GREEN)
                 t.setPraegune();
@@ -186,7 +183,7 @@ public class LaiutiLäbimine {
     }
 
     public void lock(MouseEvent event) {
-        if (!graafOlemas) return;
+        if (graaf == null) return;
         for (Tipp tipp : graaf.tipud) {
             tipp.tippGraafil.addEventFilter(MouseEvent.MOUSE_DRAGGED, Event::consume);
         }
