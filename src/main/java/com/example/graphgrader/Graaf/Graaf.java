@@ -19,7 +19,7 @@ public class Graaf {
         String[] esimene = graaf.get(0).split(" ");
 
         for (int i = 1; i <= Integer.parseInt(esimene[2]); i++) {
-            Tipp tipp = new Tipp(String.valueOf(i).charAt(0));
+            Tipp tipp = new Tipp(String.valueOf(i));
             tipud.add(tipp);
             tipp.setIndex(tipud.size() - 1);
         }
