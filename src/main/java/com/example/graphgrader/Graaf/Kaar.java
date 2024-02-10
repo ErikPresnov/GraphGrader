@@ -5,6 +5,7 @@ public class Kaar {
     public Tipp lopp;
     public int kaal;
     public Kaar jargmine;
+    public Arrow arrow;
 
     public Kaar(Tipp algus, Tipp lopp, int kaal, Kaar kaar) {
         this.algus = algus;

@@ -11,7 +11,7 @@ public class Graaf {
     public List<Tipp> tipud;
     public boolean kaalutud;
 
-    public Graaf(String failitee) throws IOException {
+    public Graaf(String failitee, boolean suunatud) throws IOException {
         List<String> graaf = loeFail(failitee);
 
         List<Tipp> tipud = new ArrayList<>();
@@ -21,7 +21,6 @@ public class Graaf {
         for (int i = 1; i <= Integer.parseInt(esimene[2]); i++) {
             Tipp tipp = new Tipp(String.valueOf(i));
             tipud.add(tipp);
-            tipp.setIndex(tipud.size() - 1);
         }
 
         for (int i = 1; i < graaf.size(); i++) {
@@ -31,8 +30,18 @@ public class Graaf {
             Tipp algus = tipud.get(alg - 1);
             Tipp loppT = tipud.get(lopp - 1);
             algus.lisaAlluv(loppT);
-            Kaar kaar = new Kaar(algus, loppT);
-            algus.kaared.add(kaar);
+            if (!suunatud) loppT.lisaAlluv(algus);
+            if (osad.length == 4) {
+                algus.kaared.add(new Kaar(algus, loppT, Integer.parseInt(osad[3])));
+                if (!suunatud)
+                    loppT.kaared.add(new Kaar(loppT, algus, Integer.parseInt(osad[3])));
+            }
+            else {
+                algus.kaared.add(new Kaar(algus, loppT));
+                if (!suunatud)
+                    loppT.kaared.add(new Kaar(loppT, algus));
+            }
+
         }
 
         this.tipud = tipud;

@@ -27,7 +27,7 @@ public class SügavutiLäbimineEes {
     public void algVaartusta() throws IOException {
         taastaAlgus();
         String failitee = "test1.txt";
-        this.graaf = new Graaf(failitee);
+        this.graaf = new Graaf(failitee, true);
         this.magasin = new ArrayDeque<>();
         this.toodeldud = new boolean[graaf.tipud.size()];
         andmestruktuur.setDisable(true);
@@ -71,7 +71,7 @@ public class SügavutiLäbimineEes {
                 Arrow arrow = new Arrow(
                         algus.tippGraafil.getCenterX(), algus.tippGraafil.getCenterY(),
                         lopp.tippGraafil.getCenterX(), lopp.tippGraafil.getCenterY(),
-                        true
+                        true, false
                 );
                 if (graaf.kaalutud) {
                     double midX = arrow.midX;

@@ -26,12 +26,12 @@
          <fx:include fx:id="prim" source="Prim.fxml"/>
        </content>
     </Tab>
-    <!--
     <Tab text="Kruskal">
        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          <fx:include fx:id="kruskal" source="Kruskal.fxml"/>
        </content>
     </Tab>
+    <!--
     <Tab text="Dijkstra">
        <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
