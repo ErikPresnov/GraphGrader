@@ -15,6 +15,7 @@ import java.util.*;
 
 public class LaiutiLäbimine {
 
+    public Button lock;
     public Button andmestruktuur;
     public Pane graafiElement;
     public HBox pseudoJarjekord;
@@ -31,9 +32,10 @@ public class LaiutiLäbimine {
         this.jarjekord = new ArrayDeque<>();
         this.toodeldud = new boolean[graaf.tipud.size()];
         andmestruktuur.setDisable(true);
+        lock.setDisable(false);
     }
 
-    public void showGraph(MouseEvent mouseEvent) throws IOException {
+    public void showGraph() throws IOException {
         algVaartusta();
         for (int i = 0; i < graaf.tipud.size(); i++) {
             Tipp tipp = graaf.tipud.get(i);
@@ -156,14 +158,15 @@ public class LaiutiLäbimine {
         return new Group(tipp, text);
     }
 
-    public void lock(MouseEvent event) {
+    public void lock() {
         if (graaf == null) return;
         for (Tipp tipp : graaf.tipud) {
             tipp.tippGraafil.addEventFilter(MouseEvent.MOUSE_DRAGGED, Event::consume);
         }
+        lock.setDisable(true);
     }
 
-    public void takeElem(MouseEvent ignored) {
+    public void takeElem() {
         if (jarjekord.isEmpty()) return;
         Tipp q = jarjekord.remove();
         pseudoJarjekord.getChildren().remove(0);

@@ -9,7 +9,7 @@
         <Button layoutX="5" layoutY="5" text="Lae Graaf" onMouseClicked="#showGraph"/>
         <!--<Button layoutX="100" layoutY="5" text="Kontrolli Lahend" onMouseClicked="#CheckSolution"/>-->
         <!--<Button layoutX="250" layoutY="5" text="Võta Tagasi" onMouseClicked="#removeStep"/>-->
-        <Button layoutX="300" layoutY="5" text="Lukusta" onMouseClicked="#lock"/>
+        <Button fx:id="lock" layoutX="300" layoutY="5" text="Lukusta" onMouseClicked="#lock"/>
         <!--<Label  layoutX="350" layoutY="5" text="Tulemus -> "/>-->
         <!--<Label  layoutX="450" layoutY="5" fx:id="tulemusVal" text="0%"/>-->
         <Label layoutX="32.0" layoutY="56.0" text="Järjekord" />
