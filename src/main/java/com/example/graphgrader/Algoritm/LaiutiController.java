@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+// Korras
 public class LaiutiController extends Controller implements Initializable {
 
     public List<Tipp> jarjekord;
