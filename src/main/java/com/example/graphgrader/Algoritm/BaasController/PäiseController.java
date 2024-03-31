@@ -24,7 +24,6 @@ public class PäiseController {
 
     public HBox pseudoStruktuur;
     public HBox pseudoToodeldud;
-    public boolean[] toodeldud;
 
     public Tipp praegune;
 
@@ -37,7 +36,6 @@ public class PäiseController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        toodeldud = new boolean[testController.g.tipud.size()];
         showGraph();
         lae.setDisable(true);
     }
@@ -76,11 +74,10 @@ public class PäiseController {
 
     public Arrow addArrowHander(Arrow arrow, Text text, Tipp algus, Tipp lopp) {
         arrow.setOnMouseClicked(e -> {
-            if (algus == praegune && lopp.tippGraafil.getFill() != Color.GREEN && lopp.tippGraafil.getFill() != Color.RED) {
-                lopp.tippGraafil.setJarjekorras();
+            if (algus == praegune && lopp.seis != TipuSeis.TÖÖDELDUD && lopp.seis != TipuSeis.PRAEGUNE) {
+                lopp.muudaSeisu(TipuSeis.ANDMESTRUKTUURIS);
                 pseudoStruktuur.getChildren().add(text);
                 testController.lisa(lopp);
-                lopp.seis = TipuSeis.ANDMESTRUKTUURIS;
             }
         });
         return arrow;
@@ -126,7 +123,6 @@ public class PäiseController {
             t.setToodeldud();
             tipp.seis = TipuSeis.TÖÖDELDUD;
             pseudoToodeldud.getChildren().add(new Text(tipp.tähis + "\t"));
-            toodeldud[Integer.parseInt(tipp.tähis) - 1] = true;
         });
         return t;
     }

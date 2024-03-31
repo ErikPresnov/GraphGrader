@@ -17,4 +17,13 @@ public class Tipp {
     public void lisaAlluv(Tipp t) {
         this.alluvad.add(t);
     }
+
+    public void muudaSeisu(TipuSeis uus) {
+        switch (uus) {
+            case ANDMESTRUKTUURIS -> tippGraafil.setJarjekorras();
+            case PRAEGUNE -> tippGraafil.setPraegune();
+            case TÖÖDELDUD -> tippGraafil.setToodeldud();
+        }
+        this.seis = uus;
+    }
 }

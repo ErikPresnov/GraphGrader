@@ -2,7 +2,7 @@
 
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.graphgrader.Algoritm.SügavutiEes" prefHeight="400.0" prefWidth="600.0">
+<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.graphgrader.Algoritm.SügavutiEesController" prefHeight="400.0" prefWidth="600.0">
     <children>
         <fx:include fx:id="Päise" source="Päis.fxml"/>
         <Pane fx:id="graafiElement" layoutX="5.0" layoutY="143.0" prefHeight="520.0" prefWidth="890.0"
