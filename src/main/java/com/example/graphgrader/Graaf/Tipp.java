@@ -8,8 +8,8 @@ public class Tipp {
     public TippGraafil tippGraafil;
     public List<Tipp> alluvad = new ArrayList<>();
     public List<Kaar> kaared = new ArrayList<>();
+    public TipuSeis seis = TipuSeis.AVASTAMATA;
     public int kaal;
-
     public Tipp(String tähis) {
         this.tähis = tähis;
     }

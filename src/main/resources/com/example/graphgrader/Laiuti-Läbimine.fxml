@@ -1,43 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.shape.Rectangle?>
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.graphgrader.Algoritm.LaiutiLäbimine" prefHeight="400.0" prefWidth="600.0">
-    <children>
-        <Button layoutX="5" layoutY="5" text="Lae Graaf" onMouseClicked="#showGraph"/>
-        <!--<Button layoutX="100" layoutY="5" text="Kontrolli Lahend" onMouseClicked="#CheckSolution"/>-->
-        <!--<Button layoutX="250" layoutY="5" text="Võta Tagasi" onMouseClicked="#removeStep"/>-->
-        <Button fx:id="lock" layoutX="300" layoutY="5" text="Lukusta" onMouseClicked="#lock"/>
-        <!--<Label  layoutX="350" layoutY="5" text="Tulemus -> "/>-->
-        <!--<Label  layoutX="450" layoutY="5" fx:id="tulemusVal" text="0%"/>-->
-        <Label layoutX="32.0" layoutY="56.0" text="Järjekord" />
-        <Button fx:id="andmestruktuur" layoutX="101.0" layoutY="54.0" text="Võta" onMouseClicked="#takeElem"/>
-        <HBox fx:id="pseudoJarjekord" layoutX="151.0" layoutY="56.0" prefHeight="100.0" prefWidth="482.0" />
-        <Label layoutX="32.0" layoutY="97.0" text="Töödeldud" />
-        <HBox fx:id="pseudoToodeldud" layoutX="101.0" layoutY="97.0" prefHeight="100.0" prefWidth="469.0" />
-        <Pane fx:id="graafiElement" layoutX="5.0" layoutY="143.0" prefHeight="520.0" prefWidth="890.0"
-              style="-fx-border-color:black; -fx-border-width:2; -fx-border-style:solid" />
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.graphgrader.Algoritm.LaiutiController"
+            prefHeight="400.0" prefWidth="600.0">
 
-        <Pane layoutX="600" layoutY="5">
-            <Rectangle width="30" height="30" fill="white"/>
-            <Label layoutX="35" layoutY="5" text="Avastamata"/>
-        </Pane>
-
-        <Pane layoutX="725" layoutY="5">
-            <Rectangle width="30" height="30" fill="red"/>
-            <Label layoutX="35" layoutY="5" text="Praegune"/>
-        </Pane>
-
-        <Pane layoutX="600" layoutY="55">
-            <Rectangle width="30" height="30" fill="yellow"/>
-            <Label layoutX="35" layoutY="5" text="Järjekorras"/>
-        </Pane>
-
-        <Pane layoutX="725" layoutY="55">
-            <Rectangle width="30" height="30" fill="green"/>
-            <Label layoutX="35" layoutY="5" text="Töödeldud"/>
-        </Pane>
-    </children>
+    <fx:include fx:id="Päise" source="Päis.fxml"/>
+    <Pane fx:id="graafiElement" layoutX="5.0" layoutY="143.0" prefHeight="520.0" prefWidth="890.0"
+          style="-fx-border-color:black; -fx-border-width:2; -fx-border-style:solid" />
 </AnchorPane>

@@ -4,4 +4,5 @@ module com.example.graphgrader {
 
     opens com.example.graphgrader;
     opens com.example.graphgrader.Algoritm;
+    opens com.example.graphgrader.Algoritm.BaasController;
 }

@@ -1,7 +1,7 @@
 package com.example.graphgrader.Algoritm;
 
 import com.example.graphgrader.Graaf.*;
-import com.example.graphgrader.Util.MinHeapKaared;
+import com.example.graphgrader.Util.Kuhjad.MinHeapKaared;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.event.Event;
 import javafx.scene.Group;

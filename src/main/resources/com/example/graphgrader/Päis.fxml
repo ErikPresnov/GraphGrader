@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.graphgrader.Algoritm.BaasController.PäiseController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <Button fx:id="lae" layoutX="5" layoutY="5" text="Lae Graaf" onMouseClicked="#laeGraaf"/>
+    <Button fx:id="lock" layoutX="300" layoutY="5" text="Lukusta" onMouseClicked="#LockGraph"/>
+    <Label fx:id="andmestruktuuriNimi" layoutX="32.0" layoutY="56.0"/>
+    <Button fx:id="andmestruktuur" layoutX="101.0" layoutY="54.0" text="Võta" onMouseClicked="#VotaAndmestruktuurist"/>
+    <HBox fx:id="pseudoStruktuur" layoutX="151.0" layoutY="56.0" prefHeight="100.0" prefWidth="482.0" />
+    <Label layoutX="32.0" layoutY="97.0" text="Töödeldud"/>
+    <HBox fx:id="pseudoToodeldud" layoutX="101.0" layoutY="97.0" prefHeight="100.0" prefWidth="469.0" />
+
+    <Pane layoutX="600" layoutY="5">
+        <Rectangle width="30" height="30" fill="white"/>
+        <Label layoutX="35" layoutY="5" text="Avastamata"/>
+    </Pane>
+
+    <Pane layoutX="725" layoutY="5">
+        <Rectangle width="30" height="30" fill="red"/>
+        <Label layoutX="35" layoutY="5" text="Praegune"/>
+    </Pane>
+
+    <Pane layoutX="600" layoutY="55">
+        <Rectangle width="30" height="30" fill="yellow"/>
+        <Label layoutX="35" layoutY="5" text="Järjekorras"/>
+    </Pane>
+
+    <Pane layoutX="725" layoutY="55">
+        <Rectangle width="30" height="30" fill="green"/>
+        <Label layoutX="35" layoutY="5" text="Töödeldud"/>
+    </Pane>
+</AnchorPane>

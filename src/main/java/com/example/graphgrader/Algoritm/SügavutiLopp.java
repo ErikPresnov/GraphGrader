@@ -13,15 +13,15 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.util.*;
 
-public class LaiutiLäbimine {
+public class SügavutiLopp {
 
-    public Button lock;
     public Button andmestruktuur;
     public Pane graafiElement;
-    public HBox pseudoJarjekord;
-    private Queue<Tipp> jarjekord;
+    public HBox pseudoMagasin;
+    private Deque<Tipp> magasin;
     public HBox pseudoToodeldud;
     private boolean[] toodeldud;
+    private boolean[] tootlemisel;
     private Tipp praegune;
     private Graaf graaf;
 
@@ -29,13 +29,13 @@ public class LaiutiLäbimine {
         taastaAlgus();
         String failitee = "test1.txt";
         this.graaf = new Graaf(failitee, true);
-        this.jarjekord = new ArrayDeque<>();
+        this.magasin = new ArrayDeque<>();
         this.toodeldud = new boolean[graaf.tipud.size()];
+        this.tootlemisel = new boolean[graaf.tipud.size()];
         andmestruktuur.setDisable(true);
-        lock.setDisable(false);
     }
 
-    public void showGraph() throws IOException {
+    public void showGraph(MouseEvent mouseEvent) throws IOException {
         algVaartusta();
         for (int i = 0; i < graaf.tipud.size(); i++) {
             Tipp tipp = graaf.tipud.get(i);
@@ -58,7 +58,7 @@ public class LaiutiLäbimine {
     public void taastaAlgus() {
         graafiElement.getChildren().clear();
         pseudoToodeldud.getChildren().clear();
-        pseudoJarjekord.getChildren().clear();
+        pseudoMagasin.getChildren().clear();
     }
 
     public void reload(Graaf g) {
@@ -97,8 +97,8 @@ public class LaiutiLäbimine {
         arrow.setOnMouseClicked(e -> {
             if (algus == praegune && lopp.tippGraafil.getFill() != Color.GREEN && lopp.tippGraafil.getFill() != Color.RED) {
                 lopp.tippGraafil.setJarjekorras();
-                pseudoJarjekord.getChildren().add(text);
-                jarjekord.add(lopp);
+                pseudoMagasin.getChildren().add(text);
+                magasin.add(lopp);
             }
         });
         return arrow;
@@ -106,9 +106,9 @@ public class LaiutiLäbimine {
 
     // true -> korras
     // false -> viga
-        // viga -> tipp ise -> kontrollib töödeldud tippu
-        // viga -> alluv -> alluv on kontrollimata
-        // viga -> null -> ei ole töödeldav
+    // viga -> tipp ise -> kontrollib töödeldud tippu
+    // viga -> alluv -> alluv on kontrollimata
+    // viga -> null -> ei ole töödeldav
     public record TipuSobivus(boolean korras, Tipp viga) {}
 
     public TippGraafil addTippGraafilHander(TippGraafil t, Tipp tipp) {
@@ -138,7 +138,7 @@ public class LaiutiLäbimine {
         if (t.tippGraafil.getFill() == Color.GREEN) return new TipuSobivus(false, t);
         if (t.tippGraafil.getFill() != Color.RED) return new TipuSobivus(false, null);
         for (Tipp tipp : t.alluvad) {
-            if (!(toodeldud[Integer.parseInt(tipp.tähis) - 1] || jarjekord.contains(tipp))) return new TipuSobivus(false, tipp);
+            if (!(toodeldud[Integer.parseInt(tipp.tähis) - 1] || magasin.contains(tipp))) return new TipuSobivus(false, tipp);
         }
         andmestruktuur.setDisable(false);
         return new TipuSobivus(true, null);
@@ -147,7 +147,7 @@ public class LaiutiLäbimine {
     public Group makeGroup(TippGraafil tipp, Text text) {
         tipp.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
             if (e.getX() < graafiElement.getLayoutX() + 25 ||
-                e.getX() > graafiElement.getLayoutX() + graafiElement.getWidth() - 35) return;
+                    e.getX() > graafiElement.getLayoutX() + graafiElement.getWidth() - 35) return;
             if (e.getY() < 30 || e.getY() > graafiElement.getHeight() - 30) return;
             tipp.setCenterX(e.getX());
             tipp.setCenterY(e.getY());
@@ -158,18 +158,17 @@ public class LaiutiLäbimine {
         return new Group(tipp, text);
     }
 
-    public void lock() {
+    public void lock(MouseEvent event) {
         if (graaf == null) return;
         for (Tipp tipp : graaf.tipud) {
             tipp.tippGraafil.addEventFilter(MouseEvent.MOUSE_DRAGGED, Event::consume);
         }
-        lock.setDisable(true);
     }
 
-    public void takeElem() {
-        if (jarjekord.isEmpty()) return;
-        Tipp q = jarjekord.remove();
-        pseudoJarjekord.getChildren().remove(0);
+    public void takeElem(MouseEvent ignored) {
+        if (magasin.isEmpty()) return;
+        Tipp q = magasin.pollLast();
+        pseudoMagasin.getChildren().remove(pseudoMagasin.getChildren().size() - 1);
         if (toodeldud[Integer.parseInt(q.tähis) - 1]) return;
         q.tippGraafil.setPraegune();
         praegune = q;

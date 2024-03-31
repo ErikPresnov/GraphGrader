@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.util.*;
 
-public class SügavutiLäbimineEes {
+public class SügavutiEes {
 
     public Button andmestruktuur;
     public Pane graafiElement;

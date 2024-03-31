@@ -1,14 +1,14 @@
-package com.example.graphgrader.Util;
+package com.example.graphgrader.Util.Kuhjad;
 
-import com.example.graphgrader.Graaf.Kaar;
+import com.example.graphgrader.Graaf.Tipp;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MinHeapKaared {
-    public List<Kaar> heap;
+public class MinHeapTipud {
+    public List<Tipp> heap;
 
-    public MinHeapKaared() {
+    public MinHeapTipud() {
         this.heap = new ArrayList<>();
     }
 
@@ -49,29 +49,29 @@ public class MinHeapKaared {
     }
 
     private void swap(int i, int j) {
-        Kaar t = heap.get(i);
+        Tipp t = heap.get(i);
         heap.set(i, heap.get(j));
         heap.set(j, t);
     }
 
-    public Kaar min() {
+    public Tipp min() {
         if (heap.size() == 0) return null;
-        Kaar tagastus = heap.remove(0);
+        Tipp tagastus = heap.remove(0);
         if (heap.size() == 0) return tagastus;
         heap.add(0, heap.remove(heap.size() - 1));
         alla(0);
         return tagastus;
     }
 
-    public void lisa(Kaar t) {
+    public void lisa(Tipp t) {
         heap.add(t);
         yles(heap.size() - 1);
     }
 
     public boolean tühi() {return heap.size() == 0;}
 
-    public boolean olemas(Kaar t) {
-        for (Kaar k : heap) if (t.algus == k.algus && t.lopp == k.lopp) return true;
+    public boolean olemas(Tipp t) {
+        for (Tipp tipp : heap) if (t == tipp) return true;
         return false;
     }
 }

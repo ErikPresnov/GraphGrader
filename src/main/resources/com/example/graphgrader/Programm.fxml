@@ -3,55 +3,34 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19">
-  <tabs>
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+         prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1"
+         xmlns="http://javafx.com/javafx/19">
     <Tab text="Laiuti">
-      <content>
-        <fx:include fx:id="laiutiLabimine" source="Laiuti-Läbimine.fxml"/>
-      </content>
+        <fx:include source="Laiuti-Läbimine.fxml"/>
     </Tab>
-
     <Tab text="Sügavuti ees">
-      <content>
-        <fx:include fx:id="sygavuti_ees" source="Sügavuti-Läbimine-Ees.fxml"/>
-      </content>
+        <fx:include source="Sügavuti-Läbimine-Ees.fxml"/>
     </Tab>
     <Tab text="Sügavuti lõpp">
-      <content>
-        <fx:include fx:id="sygavuti_lopp" source="Sügavuti-Läbimine-Lõpp.fxml"/>
-      </content>
+        <fx:include source="Sügavuti-Läbimine-Lõpp.fxml"/>
     </Tab>
     <Tab text="Prim">
-       <content>
-         <fx:include fx:id="prim" source="Prim.fxml"/>
-       </content>
+        <fx:include source="Prim.fxml"/>
     </Tab>
     <Tab text="Kruskal">
-       <content>
-          <fx:include fx:id="kruskal" source="Kruskal.fxml"/>
-       </content>
+        <fx:include source="Kruskal.fxml"/>
     </Tab>
-    <!--
     <Tab text="Dijkstra">
-       <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-       </content>
+        <fx:include source="Dijkstra.fxml"/>
     </Tab>
     <Tab text="Floyd-Warshall">
-       <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-       </content>
+        <fx:include source="FW.fxml"/>
     </Tab>
     <Tab text="Kahn">
-       <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-       </content>
+        <fx:include source="Kahn.fxml"/>
     </Tab>
-    <Tab text="Kosaraju">
-       <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-       </content>
+    <Tab text="Eeldusgraaf">
+        <fx:include source="Eeldusgraaf.fxml"/>
     </Tab>
-      -->
-  </tabs>
 </TabPane>

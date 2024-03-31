@@ -22,15 +22,7 @@ FW                  UHArismaa
 Kahn                UHArismaa
 BelmannFord         UHArismaa
 Eeldusgraaf
-Top.sort
 
-
-
-1) Laiuti - kuidas järjekorda kujutada (tipud või servad)
-2) läbimistel servade värvimine?
-3) läbimistel millal lõpetada?
-4) teade? kas sobib popupina või peaks panema "vana akna" sisse?
-5) kas top sort sügavuti läbimise kaudu on väärtuslik?
 
 sügavuti (järjekorra asemel magasin)
 kruskal (järjekorra format vigane (liiga pikk))
@@ -39,12 +31,15 @@ sügavuti lõpp on vale
 0) juhend ette (iga algoritmi juurde)
 1) servasid ei värvi
 2) järjekord tippudena
-3) kuni järjekorra lõpuni
+3) kuni järjekorra (Q) lõpuni
 4) vead faili ja meelde jätta (lõpus näidata)
 5) sammude logimine (iga samm, valisin tipu x, lisasin tipu y järjekorda jne) (logis graaf, algoritm ja siis sammud)
 6) kaarte format kust -> kuhu : kaal
 7) kahn (kõrval tabel (tipp:sisendaste) ja Q on järjekord (kasutaja ise lisab järjekorda))
 8) prim/dijkstra/kahn -> programmne lähenemine (valik selle põhjal kuidas kasutaja lisab)
 9) eeldusgraaf: top sort sisse kirjutatud (kasutaja kirjutab), tabeliga
+10) tausta peatükki midagigi seonduvat (visualiseerijad nt)
 
 *) top sort lõppjärjestuse kaudu ei tee
+
+*) LAIUTI LÄBIMINE EI TÖÖTA!!!
