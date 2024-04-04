@@ -25,4 +25,7 @@ public class Kaar {
         this.lopp = lopp;
     }
 
+    public String toString() {
+        return algus.tähis + "->" + lopp.tähis + ": " + kaal;
+    }
 }

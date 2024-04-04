@@ -5,32 +5,33 @@
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
          prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1"
-         xmlns="http://javafx.com/javafx/19">
-    <Tab text="Laiuti">
+         xmlns="http://javafx.com/javafx/19"
+         fx:controller="com.example.graphgrader.Controllerid.BaasController.MainController">
+    <Tab fx:id="Laiuti" text="Laiuti">
         <fx:include source="Laiuti-Läbimine.fxml"/>
     </Tab>
-    <Tab text="Sügavuti ees">
+    <Tab fx:id="Sygavuti1" text="Sügavuti ees">
         <fx:include source="Sügavuti-Läbimine-Ees.fxml"/>
     </Tab>
-    <Tab text="Sügavuti lõpp">
+    <Tab fx:id="Sygavuti2" text="Sügavuti lõpp">
         <fx:include source="Sügavuti-Läbimine-Lõpp.fxml"/>
     </Tab>
-    <Tab text="Prim">
+    <Tab fx:id="Prim" text="Prim">
         <fx:include source="Prim.fxml"/>
     </Tab>
-    <Tab text="Kruskal">
+    <Tab fx:id="Kruskal" text="Kruskal">
         <fx:include source="Kruskal.fxml"/>
     </Tab>
-    <Tab text="Dijkstra">
+    <Tab fx:id="Dijkstra" text="Dijkstra">
         <fx:include source="Dijkstra.fxml"/>
     </Tab>
-    <Tab text="Floyd-Warshall">
+    <Tab fx:id="FW" text="Floyd-Warshall">
         <fx:include source="FW.fxml"/>
     </Tab>
-    <Tab text="Kahn">
+    <Tab fx:id="Kahn" text="Kahn">
         <fx:include source="Kahn.fxml"/>
     </Tab>
-    <Tab text="Eeldusgraaf">
+    <Tab fx:id="Eeldus" text="Eeldusgraaf">
         <fx:include source="Eeldusgraaf.fxml"/>
     </Tab>
 </TabPane>

@@ -1,4 +1,4 @@
-package com.example.graphgrader.Algoritm.BaasController;
+package com.example.graphgrader.Controllerid.BaasController;
 
 import com.example.graphgrader.Graaf.*;
 import com.example.graphgrader.Util.TipuSobivus;
@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PäiseController {
-    public Controller testController;
+public class TippController {
+    public Controller controller;
 
     public Label andmestruktuuriNimi;
     public Button andmestruktuur;
@@ -29,20 +29,21 @@ public class PäiseController {
 
     public Button lock;
     public Button lae;
+    public boolean color = false;
+    public boolean kahn = false;
+
+    public String failitee = "Graafid\\test2.txt";
 
     public void laeGraaf(MouseEvent ignored) throws IOException {
-        try {
-            testController.g = new Graaf("Graafid\\test1.txt", true);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        controller.g = new Graaf(failitee, true);
         showGraph();
         lae.setDisable(true);
+        controller.joonistaTabel();
     }
 
     public void reload(Graaf g) {
-        testController.graafiElement.getChildren().removeIf(e -> e instanceof Arrow);
-        testController.graafiElement.getChildren().removeIf(e -> e instanceof Text);
+        controller.graafiElement.getChildren().removeIf(e -> e instanceof Arrow);
+        controller.graafiElement.getChildren().removeIf(e -> e instanceof Text);
         List<Arrow> nooled = new ArrayList<>();
         List<Text> kaalud = new ArrayList<>();
         for (Tipp t: g.tipud) {
@@ -54,62 +55,52 @@ public class PäiseController {
                         lopp.tippGraafil.getCenterX(), lopp.tippGraafil.getCenterY(),
                         true, false
                 );
-                if (g.kaalutud) {
-                    double midX = arrow.midX;
-                    double midY = arrow.midY;
-                    Text kaaluText = new Text(String.valueOf(kaar.kaal));
-                    kaaluText.setX(midX);
-                    kaaluText.setY(midY);
-                    kaalud.add(kaaluText);
-                }
+                if (g.kaalutud)
+                    kaalud.add(new Text(arrow.midX, arrow.midY, String.valueOf(kaar.kaal)));
 
-                Text text = new Text(lopp.tähis + "\t");
-                arrow = addArrowHander(arrow, text, algus, lopp);
-                nooled.add(arrow);
+                nooled.add(addArrowHander(arrow, algus, lopp, kaar));
             }
         }
-        testController.graafiElement.getChildren().addAll(nooled);
-        testController.graafiElement.getChildren().addAll(kaalud);
+        controller.graafiElement.getChildren().addAll(nooled);
+        controller.graafiElement.getChildren().addAll(kaalud);
     }
 
-    public Arrow addArrowHander(Arrow arrow, Text text, Tipp algus, Tipp lopp) {
+    public Arrow addArrowHander(Arrow arrow, Tipp algus, Tipp lopp, Kaar kaar) {
         arrow.setOnMouseClicked(e -> {
             if (algus == praegune && lopp.seis != TipuSeis.TÖÖDELDUD && lopp.seis != TipuSeis.PRAEGUNE) {
-                lopp.muudaSeisu(TipuSeis.ANDMESTRUKTUURIS);
-                pseudoStruktuur.getChildren().add(text);
-                testController.lisa(lopp);
+                controller.lisa(kaar);
+                if (color) arrow.setFill(Color.YELLOW);
+                if (kahn) controller.tee(lopp);
             }
         });
         return arrow;
     }
 
-    public void showGraph() throws IOException {
-        for (int i = 0; i < testController.g.tipud.size(); i++) {
-            Tipp tipp = testController.g.tipud.get(i);
+    public void showGraph() {
+        for (int i = 0; i < controller.g.tipud.size(); i++) {
+            Tipp tipp = controller.g.tipud.get(i);
             TippGraafil tippGraafil = new TippGraafil(40,40, 30, tipp);
             tippGraafil = addTippGraafilHander(tippGraafil, tipp);
             tipp.tippGraafil = tippGraafil;
             if (i == 0) {
                 praegune = tipp;
-                tippGraafil.setPraegune();
-                tipp.seis = TipuSeis.PRAEGUNE;
+                tipp.muudaSeisu(TipuSeis.PRAEGUNE);
             } else
                 tippGraafil.setFill(Color.WHITE);
-            Text text1 = new Text(tipp.tähis + "");
-            Group grupp1 = MakeGroup(tippGraafil, text1);
-            testController.graafiElement.getChildren().add(grupp1);
+            Group grupp = MakeGroup(tippGraafil, new Text(tipp.tähis + ""));
+            controller.graafiElement.getChildren().add(grupp);
         }
 
-        reload(testController.g);
+        reload(controller.g);
     }
 
 
     public TippGraafil addTippGraafilHander(TippGraafil t, Tipp tipp) {
         t.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            TipuSobivus tagastus = testController.kontrolli(tipp);
+            TipuSobivus tagastus = controller.kontrolli(tipp);
             if (!tagastus.korras()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                Tipp viga = tagastus.viga();
+                Tipp viga = tagastus.viganeTipp();
                 if (viga == null)
                     alert.setContentText("Tipp {%s} ei ole praegu töödeldav.".formatted(tipp.tähis));
                 else if (viga == tipp)
@@ -120,8 +111,7 @@ public class PäiseController {
                 alert.show();
                 return;
             }
-            t.setToodeldud();
-            tipp.seis = TipuSeis.TÖÖDELDUD;
+            tipp.muudaSeisu(TipuSeis.TÖÖDELDUD);
             pseudoToodeldud.getChildren().add(new Text(tipp.tähis + "\t"));
         });
         return t;
@@ -129,22 +119,22 @@ public class PäiseController {
 
     public Group MakeGroup(TippGraafil tipp, Text text) {
         tipp.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
-            if (e.getX() < testController.graafiElement.getLayoutX() + 35 ||
-                e.getX() > testController.graafiElement.getLayoutX() + testController.graafiElement.getWidth() - 35) return;
-            if (e.getY() < 35 || e.getY() > testController.graafiElement.getHeight() - 35) return;
+            if (e.getX() < controller.graafiElement.getLayoutX() + 35 ||
+                e.getX() > controller.graafiElement.getLayoutX() + controller.graafiElement.getWidth() - 35) return;
+            if (e.getY() < 35 || e.getY() > controller.graafiElement.getHeight() - 35) return;
             tipp.setCenterX(e.getX());
             tipp.setCenterY(e.getY());
             text.setX(e.getX() - 3);
             text.setY(e.getY() + 3);
-            reload(testController.g);
+            reload(controller.g);
         });
         return new Group(tipp, text);
     }
 
-    public void VotaAndmestruktuurist(MouseEvent ignored) {testController.vota();}
+    public void VotaAndmestruktuurist(MouseEvent ignored) {controller.vota();}
 
     public void LockGraph(MouseEvent ignored) {
-        Graaf g = testController.g;
+        Graaf g = controller.g;
         if (g == null) return;
         for (Tipp tipp : g.tipud) 
             tipp.tippGraafil.addEventFilter(MouseEvent.MOUSE_DRAGGED, Event::consume);

@@ -1,4 +1,4 @@
-package com.example.graphgrader.Algoritm;
+package com.example.graphgrader.Controllerid;
 
 import com.example.graphgrader.Graaf.*;
 import com.example.graphgrader.Util.Kuhjad.MinHeapKaared;
@@ -15,7 +15,7 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.util.*;
 
-public class Prim {
+public class Kruskal {
 
     public Button andmestruktuur;
     public Pane graafiElement;
@@ -30,7 +30,7 @@ public class Prim {
 
     public void algVaartusta() throws IOException {
         taastaAlgus();
-        String failitee = "test2.txt";
+        String failitee = "Graafid\\test2.txt";
         this.graaf = new Graaf(failitee, false);
         this.jarjekord = new MinHeapKaared();
         this.toodeldud = new boolean[graaf.tipud.size()];
@@ -45,7 +45,7 @@ public class Prim {
             TippGraafil tippGraafil = new TippGraafil(40,40, 30, tipp);
             tippGraafil = addTippGraafilHander(tippGraafil, tipp);
             tipp.tippGraafil = tippGraafil;
-            tippGraafil.setFill(Color.WHITE);
+            tippGraafil.setFill(Color.GREEN);
             Text text1 = new Text(tipp.tähis + "");
             Group grupp1 = makeGroup(tippGraafil, text1);
             graafiElement.getChildren().add(grupp1);
@@ -150,7 +150,7 @@ public class Prim {
                 if (vigu == 0)
                     teavitus = "Kõik tipud töödeldud. Läbimäng oli korrektne.";
                 else
-                    teavitus = "Kõik tipud töödeldud. Läbimängus oli %d viga".formatted(vigu);
+                    teavitus = "Kõik tipud töödeldud. Läbimängus oli %d viganeTipp".formatted(vigu);
                 Teavitaja.teavita(teavitus, Alert.AlertType.INFORMATION);
             }
         });
@@ -158,10 +158,10 @@ public class Prim {
     }
 
     // true -> korras
-    // false -> viga
-        // viga -> tipp ise -> kontrollib töödeldud tippu
-        // viga -> alluv -> alluv on kontrollimata
-        // viga -> null -> ei ole töödeldav
+    // false -> viganeTipp
+    // viganeTipp -> tipp ise -> kontrollib töödeldud tippu
+    // viganeTipp -> alluv -> alluv on kontrollimata
+    // viganeTipp -> null -> ei ole töödeldav
     public TipuSobivus kontrolli(Tipp t) {
         if (t.tippGraafil.getFill() == Color.GREEN) return new TipuSobivus(false, t);
         if (t.tippGraafil.getFill() != Color.RED) return new TipuSobivus(false, null);
@@ -193,6 +193,18 @@ public class Prim {
     public void lock() {
         if (graaf == null) return;
         for (Tipp tipp : graaf.tipud) tipp.tippGraafil.addEventFilter(MouseEvent.MOUSE_DRAGGED, Event::consume);
+        teeServad();
+    }
+
+    public void teeServad() {
+        for (Tipp tipp : graaf.tipud) {
+            for (Kaar kaar : tipp.kaared) {
+                if (!jarjekord.olemas(kaar) && !jarjekord.olemas(new Kaar(kaar.lopp, kaar.algus))) jarjekord.lisa(kaar);
+            }
+        }
+        pseudoJarjekord.getChildren().clear();
+        for (Kaar kaar : jarjekord.heap)
+            pseudoJarjekord.getChildren().add(new Text("{(%s%s):%d}\t".formatted(kaar.algus.tähis, kaar.lopp.tähis, kaar.kaal)));
     }
 
     public void takeElem() {

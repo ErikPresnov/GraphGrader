@@ -1,5 +1,7 @@
 package com.example.graphgrader.Graaf;
 
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class Tipp {
             case ANDMESTRUKTUURIS -> tippGraafil.setJarjekorras();
             case PRAEGUNE -> tippGraafil.setPraegune();
             case TÖÖDELDUD -> tippGraafil.setToodeldud();
+            case AVASTAMATA -> tippGraafil.setFill(Color.WHITE);
         }
         this.seis = uus;
     }

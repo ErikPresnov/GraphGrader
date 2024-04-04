@@ -39,7 +39,7 @@ public class MinHeapTipud {
         }
     }
 
-    private void yles(int i) {
+    public void yles(int i) {
         int vanem = vanem(i);
         if (vanem < 0) return;
         if (heap.get(vanem).kaal > heap.get(i).kaal) {

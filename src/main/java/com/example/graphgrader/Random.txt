@@ -41,5 +41,3 @@ sügavuti lõpp on vale
 10) tausta peatükki midagigi seonduvat (visualiseerijad nt)
 
 *) top sort lõppjärjestuse kaudu ei tee
-
-*) LAIUTI LÄBIMINE EI TÖÖTA!!!

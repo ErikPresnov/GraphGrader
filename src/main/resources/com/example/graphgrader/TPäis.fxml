@@ -6,7 +6,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.graphgrader.Algoritm.BaasController.PäiseController"
+            fx:controller="com.example.graphgrader.Controllerid.BaasController.TippController"
             prefHeight="400.0" prefWidth="600.0">
 
     <Button fx:id="lae" layoutX="5" layoutY="5" text="Lae Graaf" onMouseClicked="#laeGraaf"/>
@@ -28,7 +28,7 @@
     </Pane>
 
     <Pane layoutX="600" layoutY="55">
-        <Rectangle width="30" height="30" fill="yellow"/>
+        <Rectangle width="30" height="30" fill="orange"/>
         <Label layoutX="35" layoutY="5" text="Järjekorras"/>
     </Pane>
 
