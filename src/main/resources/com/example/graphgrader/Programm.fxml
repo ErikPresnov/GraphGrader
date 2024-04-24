@@ -6,7 +6,7 @@
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
          prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1"
          xmlns="http://javafx.com/javafx/19"
-         fx:controller="com.example.graphgrader.Controllerid.BaasController.MainController">
+         fx:controller="com.example.graphgrader.Vana.Controllerid.BaasController.MainController">
     <Tab fx:id="Laiuti" text="Laiuti">
         <fx:include source="Laiuti-Läbimine.fxml"/>
     </Tab>
