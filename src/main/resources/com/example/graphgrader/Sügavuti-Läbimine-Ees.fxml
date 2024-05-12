@@ -2,9 +2,39 @@
 
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.graphgrader.Vana.Controllerid.SügavutiEesController" prefHeight="400.0" prefWidth="600.0">
-    <fx:include fx:id="Tipp" source="TPäis.fxml"/>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.shape.Rectangle?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.graphgrader.Kontrollerid.SygEesKontroller"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <Button fx:id="laeNupp" layoutX="5" layoutY="5" text="Lae Graaf" onMouseClicked="#laeGraaf"/>
+    <Button fx:id="lukustaNupp" layoutX="5" layoutY="5" text="Lukusta" onMouseClicked="#lukustaGraaf" visible="false"/>
+    <Label layoutX="32.0" layoutY="56.0" text="Magasin"/>
+    <Button fx:id="andmestruktuur" layoutX="101.0" layoutY="54.0" text="Võta" onMouseClicked="#votaAndmestruktuurist"/>
+    <HBox fx:id="pseudoStruktuur" layoutX="151.0" layoutY="56.0" prefHeight="100.0" prefWidth="482.0" />
+    <Label layoutX="32.0" layoutY="97.0" text="Töödeldud"/>
+    <HBox fx:id="pseudoToodeldud" layoutX="101.0" layoutY="97.0" prefHeight="100.0" prefWidth="469.0" />
+
+    <Pane layoutX="670" layoutY="5">
+        <Rectangle width="30" height="30" fill="white"/>
+        <Label layoutX="35" layoutY="5" text="Avastamata"/>
+    </Pane>
+    <Pane layoutX="785" layoutY="5">
+        <Rectangle width="30" height="30" fill="red"/>
+        <Label layoutX="35" layoutY="5" text="Praegune"/>
+    </Pane>
+    <Pane layoutX="670" layoutY="55">
+        <Rectangle width="30" height="30" fill="orange"/>
+        <Label layoutX="35" layoutY="5" text="Magasinis"/>
+    </Pane>
+    <Pane layoutX="785" layoutY="55">
+        <Rectangle width="30" height="30" fill="green"/>
+        <Label layoutX="35" layoutY="5" text="Töödeldud"/>
+    </Pane>
+
     <Pane fx:id="graafiElement" layoutX="5.0" layoutY="143.0" prefHeight="520.0" prefWidth="890.0"
-          style="-fx-border-color:black; -fx-border-width:2; -fx-border-style:solid"/>
+          style="-fx-border-color:black; -fx-border-width:2; -fx-border-style:solid" />
 </AnchorPane>
