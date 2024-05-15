@@ -52,15 +52,15 @@ public class SygLoppKontroller {
         Kaar k = kaar.kaar;
         kaar.setOnMouseClicked(e -> {
             if (k.algus.seis == Tipp.TipuSeis.PRAEGUNE && (k.lopp.seis == Tipp.TipuSeis.ANDMESTRUKTUURIS || k.lopp.seis == Tipp.TipuSeis.AVASTAMATA)) {
+                sammud.add(samm++ + "\t: Lisan tipu " + k.lopp.tähis + " magasini. KORRAS");
                 jarglased.add(k.lopp);
                 magasin.add(k.lopp);
                 k.lopp.setAndmestruktuuris();
                 kuvaStruktuurid();
             } else if (k.algus.seis == Tipp.TipuSeis.PRAEGUNE && (k.lopp.seis == Tipp.TipuSeis.TÖÖDELDUD ||  k.lopp.seis == Tipp.TipuSeis.OOTEL)) {
-                sammud.add(samm++ + " : Lisan tipu " + k.lopp.tähis + " magasini. VIGA");
-                String error = samm + " : Lõpptipp " + k.lopp.tähis + " on juba töödeldud või andmestruktuuris või ootel.";
-                vead.add(error);
-                Teavitaja.teavita(error, Alert.AlertType.ERROR);
+                sammud.add(samm + "\t: Lisan tipu " + k.lopp.tähis + " magasini. VIGA");
+                vead.add(samm++ + "\t: Lõpptipp " + k.lopp.tähis + " on juba töödeldud või ootel.");
+                Teavitaja.teavita("Lõpptipp " + k.lopp.tähis + " on juba töödeldud või ootel.", Alert.AlertType.ERROR);
             }
         });
     }
@@ -117,10 +117,12 @@ public class SygLoppKontroller {
             String kontrolliTulemus = kontrolli(tipp);
             if (kontrolliTulemus.equals("")) {
                 if (tipp.tipp.seis == Tipp.TipuSeis.OOTEL) {
+                    sammud.add(samm++ + "\t: Kontrollin tippu(2) " + tipp.tipp.tähis + ". KORRAS");
                     tipp.tipp.setToodeldud();
                     toodeldud.add(tipp.tipp);
                     ootel.remove(tipp.tipp);
                 } else {
+                    sammud.add(samm++ + "\t: Kontrollin tippu(1) " + tipp.tipp.tähis + ". KORRAS");
                     ootel.add(tipp.tipp);
                     tipp.tipp.setOotel();
                 }
@@ -129,7 +131,8 @@ public class SygLoppKontroller {
                 jarglased.clear();
                 return;
             }
-            vead.add(kontrolliTulemus);
+            sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
+            vead.add(samm++ + "\t: " + kontrolliTulemus);
             Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
         });
     }
@@ -156,18 +159,21 @@ public class SygLoppKontroller {
     public void votaAndmestruktuurist(MouseEvent ignored) {
         if (magasin.isEmpty()) {
             if (toodeldud.size() == g.tipud.size()) {
-                Logija.logi(vead, g, sammud);
-                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi kirjutatud faili \"out.txt\"".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                Logija.logi(vead, g, sammud, "SügavutiLõpp", false, false);
+                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
             }
             andmestruktuur.setDisable(true);
             return;
         }
-        if (pidiTootlema()) {
-            String error = "Praegu peaks mingi tipu töödelduks määrama.";
-            Teavitaja.teavita(error, Alert.AlertType.ERROR);
+        Tipp t = pidiTootlema();
+        if (t != null) {
+            sammud.add(samm + "\t: Mingit tippu pidi praegu töötlema. VIGA");
+            vead.add(samm++ + "\t: Tippu " + t.tähis + " pidi praegu töötlema.");
+            Teavitaja.teavita("Mingit tippu pidi praegu töötlema.", Alert.AlertType.ERROR);
             return;
         }
-        Tipp t = magasin.remove(magasin.size() - 1);
+        t = magasin.remove(magasin.size() - 1);
+        sammud.add(samm++ + "\t: Võtsin magasinist järgmise tipu " + t.tähis + ". KORRAS");
         kuvaStruktuurid();
         if (t.seis == Tipp.TipuSeis.TÖÖDELDUD || t.seis == Tipp.TipuSeis.OOTEL) return;
         andmestruktuur.setDisable(true);
@@ -190,8 +196,6 @@ public class SygLoppKontroller {
                     alluvateKoopia.remove(alluv);
                 }
             }
-            System.out.println(alluvateKoopia);
-            System.out.println(jarglased);
             if (alluvateKoopia.size() != jarglased.size()) return "Mingi alluv tipp on töötlemata.";
         } else if (s == Tipp.TipuSeis.OOTEL) {
             // Teist korda --> kontrollime kas kõik järglased on töödeldud
@@ -205,14 +209,14 @@ public class SygLoppKontroller {
         return "";
     }
 
-    public boolean pidiTootlema() { // tagastab true, kui praegu pidi mingi tipu töötlema
-        if (ootel.size() == 0) return false;
+    public Tipp pidiTootlema() { // tagastab tipu, kui teda pidi töötlema
+        if (ootel.size() == 0) return null;
         Tipp jargmine = ootel.get(ootel.size() - 1);
 
         for (Tipp tipp : jargmine.alluvad)
             if (tipp.seis != Tipp.TipuSeis.TÖÖDELDUD && tipp.seis != Tipp.TipuSeis.OOTEL)
-                return false;
+                return null;
 
-        return true;
+        return jargmine;
     }
 }

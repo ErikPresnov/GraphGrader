@@ -49,7 +49,7 @@ public class FWKontroller {
         seis = new int[g.tipud.size()][g.tipud.size()];
         for (int i = 0; i < g.tipud.size(); i++)
             for (Kaar k : g.tipud.get(i).kaared)
-                seis[i][k.lopp.tähis.charAt(0) - 1 - 'A'] = k.kaal;
+                seis[i][k.lopp.tähis.charAt(0) - 'A'] = k.kaal;
 
         for (int i = 0; i < seis.length; i++)
             for (int i1 = 0; i1 < seis[i].length; i1++)
@@ -154,11 +154,13 @@ public class FWKontroller {
             try {
                 if (Integer.parseInt(sisendiSisu) != oodatud) {
                     String kontrolliTulemus = "Tipu %s kaal peaks olema %d aga on %d".formatted(t.tähis, oodatud, Integer.parseInt(sisend.get()));
-                    vead.add(kontrolliTulemus);
+                    sammud.add(samm + "\t: Küsin tipu " + t.tähis + " kaalu. VIGA");
+                    vead.add(samm++ + "\t: " + kontrolliTulemus);
                     Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
                     sisend = Optional.empty();
                     continue;
                 }
+                sammud.add(samm++ + "\t: Küsin tipu " + t.tähis + " kaalu. KORRAS");
                 korras = true;
             } catch (NumberFormatException exception) {
                 Teavitaja.teeTeavitus("Sisesta number", Alert.AlertType.INFORMATION).showAndWait();
@@ -180,12 +182,13 @@ public class FWKontroller {
         tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
             String kontrolliTulemus = kontrolli(tipp);
             if (kontrolliTulemus.equals("")) {
+                sammud.add(samm++ + "\t: Töötlen tippu " + tipp.tipp.tähis + ". KORRAS");
                 toodeldud.add(tipp.tipp);
                 tipp.tipp.setToodeldud();
 
                 if (toodeldud.size() == g.tipud.size()) {
-                    Logija.logi(vead, g, sammud);
-                    Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi kirjutatud faili \"out.txt\"".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                    Logija.logi(vead, g, sammud, "FW", true, false);
+                    Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
                     return;
                 }
 
@@ -193,7 +196,8 @@ public class FWKontroller {
                 kuvaStruktuurid();
                 return;
             }
-            vead.add(kontrolliTulemus);
+            sammud.add(samm + "\t: Töötlen tippu " + tipp.tipp.tähis + ". VIGA");
+            vead.add(samm++ + "\t: " + kontrolliTulemus);
             Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
         });
     }

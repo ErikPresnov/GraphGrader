@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 
-// kuidas fikseerida servade jÄrjekord? kasutaja sisestab või programmselt (st esimese tipu alluvad jne)
 // kuidas lõpetada? kasutaja peaks indikeerima, et parandusi ei toimunud ehk lõpp või automaatselt kinni?
 public class BFKontroller {
 
@@ -122,13 +121,13 @@ public class BFKontroller {
             try {
                 if (Integer.parseInt(sisendiSisu) != oodatud) {
                     String kontrolliTulemus = "Tipu %s kaal peaks olema %d aga on %d".formatted(k.lopp.tähis, oodatud, Integer.parseInt(sisend.get()));
-                    sammud.add(samm + ":Küsisin kaalu tipu " + k.lopp.tähis + " kohta. VIGA");
-                    vead.add(samm++ + ":" + kontrolliTulemus);
+                    sammud.add(samm + "\t: Küsisin kaalu tipu " + k.lopp.tähis + " kohta. VIGA");
+                    vead.add(samm++ + "\t: " + kontrolliTulemus);
                     Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
                     sisend = Optional.empty();
                     continue;
                 }
-                sammud.add(samm++ + ":Küsisin kaalu tipu " + k.lopp.tähis + " kohta. KORRAS");
+                sammud.add(samm++ + "\t: Küsisin kaalu tipu " + k.lopp.tähis + " kohta. KORRAS");
                 korras = true;
             } catch (NumberFormatException exception) {
                 Teavitaja.teeTeavitus("Sisesta number", Alert.AlertType.INFORMATION).showAndWait();
@@ -163,14 +162,14 @@ public class BFKontroller {
         tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
             String kontrolliTulemus = kontrolli(tipp);
             if (kontrolliTulemus.equals("")) {
-                sammud.add(samm++ + ": Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
+                sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
                 tipp.tipp.setToodeldud();
                 kuvaStruktuurid();
                 andmestruktuur.setDisable(false);
                 return;
             }
-            sammud.add(samm++ + " : Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
-            vead.add(samm + " : " + kontrolliTulemus);
+            sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
+            vead.add(samm++ + "\t: " + kontrolliTulemus);
             Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
         });
     }
@@ -205,13 +204,21 @@ public class BFKontroller {
         Kaar k = kaarteJarjekord.remove(0);
         if (k == null) {
             boolean kasutaja = !kysiSisendit();
+            if (vahetus == kasutaja)
+                sammud.add(samm++ + "\t: Küsin lõpetamise kohta. KORRAS");
+            else {
+                sammud.add(samm + "\t: Küsin lõpetamise kohta. VIGA");
+                vead.add(samm++ + "\t: Ootasin " + vahetus + " aga sain " + kasutaja);
+            }
             while (vahetus != kasutaja) {
                 Teavitaja.teeTeavitus("Vale vastus", Alert.AlertType.ERROR).showAndWait();
+                sammud.add(samm + "\t: Küsin lõpetamise kohta. VIGA");
+                vead.add(samm++ + "\t: Ootasin " + vahetus + " aga sain " + kasutaja);
                 kasutaja = !kysiSisendit();
             }
             if (!vahetus) {
-                Logija.logi(vead, g, sammud);
-                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi kirjutatud faili \"out.txt\"".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                Logija.logi(vead, g, sammud, "BF", true, false);
+                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
                 andmestruktuur.setDisable(true);
                 return;
             }
@@ -220,6 +227,7 @@ public class BFKontroller {
             vahetus = false;
             return;
         }
+        sammud.add(samm++ + "\t: Võtsin järgmise kaare " + k);
         k.arrow.setFill(Color.RED);
         kaarteJarjekord.add(k);
         int jargmineOodatud = Math.min(k.algus.kaal + k.kaal, k.lopp.kaal);

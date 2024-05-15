@@ -15,8 +15,7 @@ public class Tipp {
     public List<Kaar> kaared = new ArrayList<>();
     public TipuSeis seis = TipuSeis.AVASTAMATA;
     public int kaal;
-    public int varaseimLopp = 0;
-    public int hiliseimAlgus = 0;
+    public int varaseimLopp = 0, hiliseimAlgus = 0;
     public Tipp(String tähis) {
         this.tähis = tähis;
     }

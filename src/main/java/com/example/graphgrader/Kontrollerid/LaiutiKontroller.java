@@ -4,7 +4,6 @@ import com.example.graphgrader.Graaf.*;
 import com.example.graphgrader.Graaf.Tipp.TipuSeis;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
-import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -58,14 +57,13 @@ public class LaiutiKontroller {
         kaar.setOnMouseClicked(e -> {
             if (k.algus.seis == TipuSeis.PRAEGUNE && k.lopp.seis == TipuSeis.AVASTAMATA) {
                 jarjekord.add(k.lopp);
-                sammud.add(samm++ + ": Lisan tipu " + k.lopp.tähis + " järjekorda. KORRAS");
+                sammud.add(samm++ + "\t: Lisan tipu " + k.lopp.tähis + " järjekorda. KORRAS");
                 k.lopp.setAndmestruktuuris();
                 kuvaStruktuurid();
             } else if (k.algus.seis == TipuSeis.PRAEGUNE && (k.lopp.seis == TipuSeis.ANDMESTRUKTUURIS || k.lopp.seis == TipuSeis.TÖÖDELDUD)) {
-                sammud.add(samm++ + " : Lisan tipu " + k.lopp.tähis + " järjekorda. VIGA");
-                String error = samm + " : Lõpptipp " + k.lopp.tähis + " on juba töödeldud või andmestruktuuris.";
-                vead.add(error);
-                Teavitaja.teavita(error, Alert.AlertType.ERROR);
+                sammud.add(samm + "\t: Lisan tipu " + k.lopp.tähis + " järjekorda. VIGA");
+                vead.add(samm++ + "\t: Lõpptipp " + k.lopp.tähis + " on juba töödeldud või andmestruktuuris.");
+                Teavitaja.teavita("Lõpptipp " + k.lopp.tähis + " on juba töödeldud või andmestruktuuris.", Alert.AlertType.ERROR);
             }
         });
     }
@@ -108,7 +106,7 @@ public class LaiutiKontroller {
         tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
             String kontrolliTulemus = kontrolli(tipp);
             if (kontrolliTulemus.equals("")) {
-                sammud.add(samm++ + ": Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
+                sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
                 tipp.tipp.setToodeldud();
                 if (toodeldud.contains(tipp.tipp)) return;
                 toodeldud.add(tipp.tipp);
@@ -116,8 +114,8 @@ public class LaiutiKontroller {
                 andmestruktuur.setDisable(false);
                 return;
             }
-            sammud.add(samm++ + " : Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
-            vead.add(samm + " : " + kontrolliTulemus);
+            sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
+            vead.add(samm++ + "\t: " + kontrolliTulemus);
             Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
         });
     }
@@ -144,14 +142,14 @@ public class LaiutiKontroller {
     public void votaAndmestruktuurist(MouseEvent ignored) {
         if (jarjekord.isEmpty()) {
             if (toodeldud.size() == g.tipud.size()) {
-                Logija.logi(vead, g, sammud);
-                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi kirjutatud faili \"out.txt\"".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                Logija.logi(vead, g, sammud, "Laiuti", false, false);
+                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
             }
             andmestruktuur.setDisable(true);
             return;
         }
         Tipp t = jarjekord.remove(0);
-        sammud.add(samm++ + " : Võtsin järjekorrast järgmise tipu " + t.tähis);
+        sammud.add(samm++ + "\t: Võtsin järjekorrast järgmise tipu " + t.tähis + ". KORRAS");
         if (t.seis != TipuSeis.TÖÖDELDUD) t.setPraegune();
         if (t.seis != TipuSeis.TÖÖDELDUD) andmestruktuur.setDisable(true);
         kuvaStruktuurid();

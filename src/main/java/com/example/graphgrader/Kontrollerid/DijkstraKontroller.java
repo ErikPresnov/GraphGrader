@@ -88,13 +88,13 @@ public class DijkstraKontroller {
             try {
                 if (Integer.parseInt(sisendiSisu) != oodatud) {
                     String kontrolliTulemus = "Tipu %s kaal peaks olema %d aga on %d".formatted(k.lopp.tähis, oodatud, Integer.parseInt(sisend.get()));
-                    sammud.add(samm + ":Küsisin kaalu tipu " + k.lopp.tähis + " kohta. VIGA");
-                    vead.add(samm++ + ":" + kontrolliTulemus);
+                    sammud.add(samm + "\t: Küsisin kaalu tipu " + k.lopp.tähis + " kohta. VIGA");
+                    vead.add(samm++ + "\t: " + kontrolliTulemus);
                     Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
                     sisend = Optional.empty();
                     continue;
                 }
-                sammud.add(samm++ + ":Küsisin kaalu tipu " + k.lopp.tähis + " kohta. KORRAS");
+                sammud.add(samm++ + "\t: Küsisin kaalu tipu " + k.lopp.tähis + " kohta. KORRAS");
                 korras = true;
             } catch (NumberFormatException exception) {
                 Teavitaja.teeTeavitus("Sisesta number", Alert.AlertType.INFORMATION).showAndWait();
@@ -149,15 +149,15 @@ public class DijkstraKontroller {
         tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
             String kontrolliTulemus = kontrolli(tipp);
             if (kontrolliTulemus.equals("")) {
-                sammud.add(samm++ + ":Kontrollin tippu " + tipp.tipp.tähis + ": KORRAS");
+                sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
                 toodeldud.add(tipp.tipp);
                 tipp.tipp.setToodeldud();
                 kuvaStruktuurid();
                 andmestruktuuriNupp.setDisable(false);
                 return;
             }
-            sammud.add(samm++ + ":Kontrollin tippu " + tipp.tipp.tähis + ": VIGA");
-            vead.add(samm + ":" + kontrolliTulemus);
+            sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
+            vead.add(samm++ + "\t: " + kontrolliTulemus);
             Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
         });
     }
@@ -190,13 +190,15 @@ public class DijkstraKontroller {
     public void votaAndmestruktuurist(MouseEvent ignored) {
         if (kuhi.onTyhi()) {
             if (toodeldud.size() == g.tipud.size()) {
-                Logija.logi(vead, g, sammud);
+                Logija.logi(vead, g, sammud, "Dijkstra", true, false);
                 Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi kirjutatud faili \"out.txt\"".formatted(vead.size()), Alert.AlertType.INFORMATION);
             }
             andmestruktuuriNupp.setDisable(true);
             return;
         }
-        kuhi.min().setPraegune();
+        Tipp t = kuhi.min();
+        sammud.add(samm++ + "\t: Võtsin järjekorrast järgmise tipu " + t.tähis + ". KORRAS");
+        t.setPraegune();
         andmestruktuuriNupp.setDisable(true);
         kuvaStruktuurid();
     }

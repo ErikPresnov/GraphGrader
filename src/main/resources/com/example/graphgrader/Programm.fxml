@@ -5,8 +5,7 @@
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
          prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1"
-         xmlns="http://javafx.com/javafx/19"
-         fx:controller="com.example.graphgrader.Vana.Controllerid.BaasController.MainController">
+         xmlns="http://javafx.com/javafx/19" fx:controller="com.example.graphgrader.Kontrollerid.MainController">
     <Tab fx:id="Laiuti" text="Laiuti">
         <fx:include source="Laiuti-Läbimine.fxml"/>
     </Tab>
@@ -27,6 +26,9 @@
     </Tab>
     <Tab fx:id="FW" text="Floyd-Warshall">
         <fx:include source="FW.fxml"/>
+    </Tab>
+    <Tab fx:id="BF" text="Bellman-Ford">
+        <fx:include source="BF.fxml"/>
     </Tab>
     <Tab fx:id="Kahn" text="Kahn">
         <fx:include source="Kahn.fxml"/>

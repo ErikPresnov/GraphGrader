@@ -11,12 +11,12 @@ import java.util.List;
 
 public class Logija {
 
-    public static void logi(List<String> vead, Graaf g, List<String> sammud) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("Out.txt"))) {
-            bw.write("p edge %d %d%n".formatted(g.tipud.size(), g.tipud.stream().mapToInt(e -> e.alluvad.size()).sum()));
+    public static void logi(List<String> vead, Graaf g, List<String> sammud, String algo, boolean kaarteKaalud, boolean tipuKaalud) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(algo + "_logi.txt"))) {
+            bw.write("p edge %d %d%s%n".formatted(g.tipud.size(), g.tipud.stream().mapToInt(e -> e.alluvad.size()).sum(), (tipuKaalud ? tippudeKaalud(g) : "")));
             for (Tipp t : g.tipud)
                 for (Kaar k : t.kaared)
-                    bw.write("e " + t.tähis + " " + k.lopp.tähis + (g.kaalutud ? (" " + k.kaal) : "") + "\n");
+                    bw.write("e " + t.tähis + " " + k.lopp.tähis + (kaarteKaalud ? (" " + k.kaal) : "") + "\n");
 
             bw.write("\n");
             int idx = 0;
@@ -27,6 +27,10 @@ public class Logija {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static String tippudeKaalud(Graaf g) {
+        return String.join(" ", g.tipud.stream().map(e -> String.valueOf(e.kaal)).toList());
     }
 
 }

@@ -29,6 +29,7 @@ public class PrimKontroller {
     public String failitee = "Graafid\\test2.txt";
     public Button andmestruktuur, laeNupp, lukustaNupp;
     public HBox pseudoStruktuur, pseudoToodeldud;
+    public int samm = 1;
 
 
     public void laeGraaf(MouseEvent ignored) throws IOException {
@@ -57,9 +58,12 @@ public class PrimKontroller {
         kaar.setOnMouseClicked(e -> {
             if (k.algus.seis == Tipp.TipuSeis.PRAEGUNE && (k.lopp.seis == Tipp.TipuSeis.ANDMESTRUKTUURIS || k.lopp.seis == Tipp.TipuSeis.AVASTAMATA)) {
                 if (kuhi.sisaldab(k)) {
+                    sammud.add(samm + "\t: Lisan serva " + k + " järjekorda. VIGA");
+                    vead.add(samm++ + "\t: Serv on järjekorras juba olemas.");
                     Teavitaja.teavita("Serva topelt lisamine", Alert.AlertType.ERROR);
                     return;
                 }
+                sammud.add(samm++ + "\t: Lisan serva " + k + " järjekorda. KORRAS");
                 kuhi.lisa(k);
                 k.lopp.setAndmestruktuuris();
                 kaar.setFill(Color.ORANGE);
@@ -71,6 +75,10 @@ public class PrimKontroller {
                         break;
                     }
                 kuvaStruktuurid();
+            } else if (k.algus.seis == Tipp.TipuSeis.PRAEGUNE && k.lopp.seis == Tipp.TipuSeis.TÖÖDELDUD) {
+                sammud.add(samm + "\t: Lisan serva " + kaar + " järjekorda. VIGA");
+                vead.add(samm++ + "\t: Serva lõpptipp " + k.lopp.tähis + " on juba töödeldud.");
+                Teavitaja.teavita("Serva lõpptipp on juba töödeldud.", Alert.AlertType.ERROR);
             }
         });
     }
@@ -123,13 +131,15 @@ public class PrimKontroller {
         tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
             String kontrolliTulemus = kontrolli(tipp);
             if (kontrolliTulemus.equals("")) {
+                sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
                 tipp.tipp.setToodeldud();
                 toodeldud.add(tipp.tipp);
                 kuvaStruktuurid();
                 andmestruktuur.setDisable(false);
                 return;
             }
-            vead.add(kontrolliTulemus);
+            sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
+            vead.add(samm++ + "\t: " +  kontrolliTulemus);
             Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
         });
     }
@@ -163,13 +173,14 @@ public class PrimKontroller {
     public void votaAndmestruktuurist(MouseEvent ignored) {
         if (kuhi.onTyhi()) {
             if (toodeldud.size() == g.tipud.size()) {
-                Logija.logi(vead, g, sammud);
-                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi kirjutatud faili \"out.txt\"".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                Logija.logi(vead, g, sammud, "Prim", true, false);
+                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
             }
             andmestruktuur.setDisable(true);
             return;
         }
         Kaar min = kuhi.min();
+        sammud.add(samm++ + "\t: Võtsin järjekorrast järgmise kaare " + min + ". KORRAS");
         kuvaStruktuurid();
         if (min.lopp.seis == Tipp.TipuSeis.TÖÖDELDUD) return;
         min.arrow.setFill(Color.GREEN);

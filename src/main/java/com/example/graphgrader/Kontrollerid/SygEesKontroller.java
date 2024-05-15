@@ -54,9 +54,13 @@ public class SygEesKontroller {
         kaar.setOnMouseClicked(e -> {
             if (k.algus.seis == Tipp.TipuSeis.PRAEGUNE && (k.lopp.seis == Tipp.TipuSeis.ANDMESTRUKTUURIS || k.lopp.seis == Tipp.TipuSeis.AVASTAMATA)) {
                 magasin.add(k.lopp);
-                sammud.add(samm++ + " : Lisan tipu " + k.lopp.tähis + " magasini. KORRAS");
+                sammud.add(samm++ + "\t: Lisan tipu " + k.lopp.tähis + " magasini. KORRAS");
                 k.lopp.setAndmestruktuuris();
                 kuvaStruktuurid();
+            } else if (k.algus.seis == Tipp.TipuSeis.PRAEGUNE && k.lopp.seis == Tipp.TipuSeis.TÖÖDELDUD) {
+                sammud.add(samm + "\t: Lisan tipu " + k.lopp.tähis + " magasini. VIGA");
+                vead.add(samm++ + "\t: Tipp " + k.lopp.tähis + " on juba töödeldud.");
+                Teavitaja.teavita("Lõpptipp " + k.lopp.tähis + " on juba töödeldud.", Alert.AlertType.ERROR);
             }
         });
     }
@@ -109,15 +113,15 @@ public class SygEesKontroller {
         tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
             String kontrolliTulemus = kontrolli(tipp);
             if (kontrolliTulemus.equals("")) {
-                sammud.add(samm++ + " : Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
+                sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
                 toodeldud.add(tipp.tipp);
                 tipp.tipp.setToodeldud();
                 kuvaStruktuurid();
                 andmestruktuur.setDisable(false);
                 return;
             }
-            sammud.add(samm++ + " : Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
-            vead.add(samm + " : " + kontrolliTulemus);
+            sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
+            vead.add(samm++ + "\t: " + kontrolliTulemus);
             Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
         });
     }
@@ -144,14 +148,14 @@ public class SygEesKontroller {
     public void votaAndmestruktuurist(MouseEvent ignored) {
         if (magasin.isEmpty()) {
             if (toodeldud.size() == g.tipud.size()) {
-                Logija.logi(vead, g, sammud);
-                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi kirjutatud faili \"out.txt\"".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                Logija.logi(vead, g, sammud, "SügavutiEes", false, false);
+                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
             }
             andmestruktuur.setDisable(true);
             return;
         }
         Tipp t = magasin.remove(magasin.size() - 1);
-        sammud.add(samm++ + " : Võtsin magasinist järgmise tipu " + t.tähis);
+        sammud.add(samm++ + "\t: Võtsin magasinist järgmise tipu " + t.tähis + ". KORRAS");
         if (t.seis != Tipp.TipuSeis.TÖÖDELDUD) t.setPraegune();
         if (t.seis != Tipp.TipuSeis.TÖÖDELDUD) andmestruktuur.setDisable(true);
         kuvaStruktuurid();

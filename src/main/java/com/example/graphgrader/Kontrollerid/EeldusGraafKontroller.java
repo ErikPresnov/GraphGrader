@@ -13,8 +13,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -81,7 +79,7 @@ public class EeldusGraafKontroller {
         tekst3.setOnMouseClicked(e -> {
             if (tipp.tipp.seis != TipuSeis.PRAEGUNE) return;
             if (!edasi) return;
-            int tulemus = kysiSisendit(tipp.tipp, tipp.tipp.kaal + maxEelastest(tipp.tipp), "varaseim lopuaeg");
+            int tulemus = kysiSisendit(tipp.tipp, tipp.tipp.kaal + maxEelastest(tipp.tipp), "Varaseim lõpuaeg?");
             tipp.tipp.varaseimLopp = tulemus;
             tekst3.setText(String.valueOf(tulemus));
             varaseimLoppOlemas[g.tipud.indexOf(tipp.tipp)] = true;
@@ -92,7 +90,7 @@ public class EeldusGraafKontroller {
         tekst4.setOnMouseClicked(e -> {
             if (tipp.tipp.seis != TipuSeis.PRAEGUNE) return;
             if (edasi) return;
-            int tulemus = kysiSisendit(tipp.tipp, minJarglastest(tipp.tipp) - tipp.tipp.kaal, "hiliseim algusaeg");
+            int tulemus = kysiSisendit(tipp.tipp, minJarglastest(tipp.tipp) - tipp.tipp.kaal, "Hiliseim algusaeg?");
             tipp.tipp.hiliseimAlgus = tulemus;
             tekst4.setText(String.valueOf(tulemus));
             hilisemAlgusOlemas[g.tipud.indexOf(tipp.tipp)] = true;
@@ -109,9 +107,9 @@ public class EeldusGraafKontroller {
                 edasi = false;
             } else {
                 int index = leiaPraegune();
-
                 topoloogilineJarjestus.get(index).setAvastamata();
                 topoloogilineJarjestus.get(index + 1).setPraegune();
+                sammud.add(samm++ + "\t: Liigun järgmise tipu " + topoloogilineJarjestus.get(index + 1).tähis + " juurde. KORRAS");
             }
         } else {
             if (g.tipud.get(0).seis == TipuSeis.PRAEGUNE) {
@@ -121,6 +119,7 @@ public class EeldusGraafKontroller {
                 int index = leiaPraegune();
                 topoloogilineJarjestus.get(index).setToodeldud();
                 topoloogilineJarjestus.get(index - 1).setPraegune();
+                sammud.add(samm++ + "\t: Liigun eelmise tipu " + topoloogilineJarjestus.get(index - 1).tähis + " juurde. KORRAS");
             }
         }
         uuenda();
@@ -139,7 +138,7 @@ public class EeldusGraafKontroller {
 
         while (!kriitilised.isEmpty()) {
             TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Kriitiline tipp");
+            dialog.setTitle("Kriitiline tipp?");
             Optional<String> sisend = dialog.showAndWait();
             boolean korras = false;
             while (!korras) {
@@ -147,18 +146,21 @@ public class EeldusGraafKontroller {
                 String sisendiSisu = sisend.get();
                 Tipp t = leiaTipp(sisendiSisu);
                 if (t == null) {
-                    String kontrolliTulemus = "Sellist tippu ei eksisteeri";
-                    vead.add(kontrolliTulemus);
+                    String kontrolliTulemus = "Sellist tippu ei eksisteeri.";
+                    sammud.add(samm + "\t: Küsin kriitilist tippu. VIGA");
+                    vead.add(samm++ + "\t: " + kontrolliTulemus);
                     Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
                     sisend = Optional.empty();
                 } else if (!kriitilised.contains(t)) {
                     String kontrolliTulemus;
-                    if (sisestatud.contains(t)) kontrolliTulemus = "See tipp on juba sisestatud";
-                    else kontrolliTulemus = "Sisestatud tipp ei ole kriitiline";
-                    vead.add(kontrolliTulemus);
+                    if (sisestatud.contains(t)) kontrolliTulemus = "See tipp on juba sisestatud.";
+                    else kontrolliTulemus = "Sisestatud tipp ei ole kriitiline.";
+                    sammud.add(samm + "\t: Küsin kriitilist tippu. VIGA");
+                    vead.add(samm++ + "\t: " + kontrolliTulemus);
                     Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
                     sisend = Optional.empty();
                 } else {
+                    sammud.add(samm + "\t: Küsin kriitilist tippu. KORRAS");
                     t.tippGraafil.setFill(Color.ORANGERED);
                     sisestatud.add(t);
                     kriitilised.remove(t);
@@ -167,8 +169,8 @@ public class EeldusGraafKontroller {
                 }
             }
         }
-        Logija.logi(vead, g, sammud);
-        Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi kirjutatud faili \"out.txt\"".formatted(vead.size()), Alert.AlertType.INFORMATION);
+        Logija.logi(vead, g, sammud, "Eeldusgraaf", false, true);
+        Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
     }
 
     private void kysiLoppu() {
@@ -181,12 +183,14 @@ public class EeldusGraafKontroller {
             String sisendiSisu = sisend.get();
             try {
                 if (Integer.parseInt(sisendiSisu) != koguAeg) {
-                    String kontrolliTulemus = "Kogu lopuaeg peaks olema %d aga on %s".formatted(koguAeg, Integer.parseInt(sisend.get()));
-                    vead.add(kontrolliTulemus);
+                    String kontrolliTulemus = "Kogu lõpuaeg peaks olema %d aga sisestati %s".formatted(koguAeg, Integer.parseInt(sisend.get()));
+                    sammud.add(samm + "\t: Küsin kogu lõpuaega. VIGA");
+                    vead.add(samm++ + "\t: " + kontrolliTulemus);
                     Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
                     sisend = Optional.empty();
                     continue;
                 }
+                sammud.add(samm + "\t: Küsin kogu lõpuaega. KORRAS");
                 korras = true;
             } catch (NumberFormatException exception) {
                 Teavitaja.teeTeavitus("Sisesta number", Alert.AlertType.INFORMATION).showAndWait();
@@ -222,12 +226,14 @@ public class EeldusGraafKontroller {
             try {
                 if (Integer.parseInt(sisendiSisu) != oodatud) {
                     String kontrolliTulemus = "Tipu %s %s peaks olema %d aga on %d".formatted(t.tähis, mida, oodatud, Integer.parseInt(sisend.get()));
-                    vead.add(kontrolliTulemus);
+                    sammud.add(samm + "\t: Küsin tipu " + t.tähis + " " + mida + ". VIGA");
+                    vead.add(samm++ + "\t: " + kontrolliTulemus);
                     Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
                     sisend = Optional.empty();
                     continue;
                 }
                 korras = true;
+                sammud.add(samm++ + "\t: Küsin tipu " + t.tähis + " " + mida + ". KORRAS");
             } catch (NumberFormatException exception) {
                 Teavitaja.teeTeavitus("Sisesta number", Alert.AlertType.INFORMATION).showAndWait();
                 sisend = Optional.empty();
@@ -249,7 +255,6 @@ public class EeldusGraafKontroller {
     }
 
     private void kysiTopSort() {
-        sammud.add(samm++ + ": Küsin topoloogilist järjestust");
         boolean korras = false;
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Topoloogiline jarjestus?");
@@ -257,20 +262,23 @@ public class EeldusGraafKontroller {
         while (!korras) {
             while (sisend.isEmpty()) sisend = dialog.showAndWait();
             String sisendiSisu = sisend.get();
-            if (!sobib(sisendiSisu)) {
+            String error = sobib(sisendiSisu);
+            if (error != null) {
                 String kontrolliTulemus = "Sisestus ei ole sobiv topoloogiline jarjestus";
-                vead.add(samm + ":" + kontrolliTulemus);
                 Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
+                sammud.add(samm + "\t: Küsin topolooglist järjestust. VIGA");
+                vead.add(samm++ + "\t: " + kontrolliTulemus);
                 sisend = Optional.empty();
                 continue;
             }
             korras = true;
+            sammud.add(samm++ + "\t: Küsin topoloogilist järjestust. KORRAS");
         }
     }
 
-    private boolean sobib(String sisendiSisu) {
+    private String sobib(String sisendiSisu) {
         String[] jupid = sisendiSisu.split(",");
-        if (jupid.length != g.tipud.size()) return false;
+        if (jupid.length != g.tipud.size()) return "Topoloogiline järjestus ei sisalda piisavalt tippe.";
 
         List<Tipp> potentsiaalne = new ArrayList<>();
         List<Tipp> jargmised = new ArrayList<>();
@@ -285,14 +293,10 @@ public class EeldusGraafKontroller {
 
         for (String s : jupid) {
             Tipp vastav = leiaTipp(s);
-            if (vastav == null) {
-                System.out.println("Ei leidnud tippu ");
-                return false;
-            }
-            if (!jargmised.contains(vastav)) {
-                System.out.println("Ei saa jargmine olla");
-                return false;
-            }
+            if (vastav == null) return "Topoloogiline järjestus sisaldab tippe, mida ei eksisteeri.";
+
+            if (!jargmised.contains(vastav)) return "Topoloogiline järjestus on vigane.";
+
             for (Tipp t : vastav.alluvad) {
                 sisendid.put(t, sisendid.get(t) - 1);
                 if (sisendid.get(t) == 0) jargmised.add(t);
@@ -304,7 +308,7 @@ public class EeldusGraafKontroller {
         topoloogilineJarjestus = potentsiaalne;
         topoloogilineJarjestus.get(0).setPraegune();
         topsort.setText(potentsiaalne.stream().map(t -> t.tähis + "\t").collect(Collectors.joining()));
-        return true;
+        return null;
     }
 
     private Tipp leiaTipp(String nimi) {

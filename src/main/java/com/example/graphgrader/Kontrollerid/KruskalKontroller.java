@@ -123,21 +123,25 @@ public class KruskalKontroller {
 
     public void votaAndmestruktuurist(MouseEvent ignored) {
         if (kuhi.onTyhi()) {
-            Logija.logi(vead, g, sammud);
-            Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi kirjutatud faili \"out.txt\"".formatted(vead.size()), Alert.AlertType.INFORMATION);
+            Logija.logi(vead, g, sammud, "Kruskal", true, false);
+            Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
             andmestruktuur.setDisable(true);
             return;
         }
         Kaar min = kuhi.min();
+        sammud.add(samm++ + "\t: Võtsin järjekorrast järgmise kaare " + min + ". KORRAS");
         kuvaStruktuurid();
 
         teeKaaredVarviliseks(min, Color.ORANGE);
         boolean kasKuulub = leiaKuuluvus(min);
         boolean vastus = kysiSisendit();
         while (vastus != kasKuulub) {
+            sammud.add(samm + "\t: Küsin kaare toesesse kuulmist. VIGA");
+            vead.add(samm++ + "\t: Kaar " + min + (kasKuulub ? " peaks " : " ei peaks ") + "toesesse kuuluma.");
             Teavitaja.teeTeavitus("Sain vale vastuse", Alert.AlertType.ERROR).showAndWait();
             vastus = kysiSisendit();
         }
+        sammud.add(samm++ + "\t: Küsin kaare " + min + " toesesse kuulmist. KORRAS");
         if (kasKuulub) teeKaaredVarviliseks(min, Color.GREEN);
         else teeKaaredVarviliseks(min, Color.RED);
     }

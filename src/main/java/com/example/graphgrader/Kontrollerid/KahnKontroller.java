@@ -29,7 +29,7 @@ public class KahnKontroller {
     public String failitee = "Graafid\\test3.txt";
     public Button laeNupp, andmestruktuur, lukustaNupp;
     public HBox pseudoStruktuur, pseudoToodeldud;
-
+    public int samm = 1;
     public GridPane tabel;
 
     public void joonistaTabel() {
@@ -37,9 +37,12 @@ public class KahnKontroller {
         kontrollNupp.setOnMouseClicked(mouseEvent -> {
             try{
                 kontrolliMassiive();
+                sammud.add(samm++ + "\t: Kontrollin algseid sisendastmeid. KORRAS");
                 kontrollNupp.setVisible(false);
                 andmestruktuur.setDisable(false);
             } catch (RuntimeException e) {
+                sammud.add(samm + "\t: Kontrollin algseid sisendastmeid. VIGA");
+                vead.add(samm++ + "\t: Ootasin: " + Arrays.toString(paris) + " , sain: " + Arrays.toString(olemas));
                 Teavitaja.teavita("Sisendastmed on vigased", Alert.AlertType.INFORMATION);
             }
         });
@@ -76,6 +79,7 @@ public class KahnKontroller {
             lisa.setOnMouseClicked(e -> {
                 if (kontrollNupp.isVisible()) return;
                 if (olemas[g.tipud.get(finalI).tähis.charAt(0) - 'A'] == 0) {
+                    sammud.add(samm++ + "\t: Lisan tipu " + g.tipud.get(finalI).tähis + " järjekorda. KORRAS");
                     g.tipud.get(finalI).setAndmestruktuuris();
                     jarjekord.add(g.tipud.get(finalI));
                     lisa.setVisible(false);
@@ -83,6 +87,8 @@ public class KahnKontroller {
                     yles.setVisible(false);
                     kuvaStruktuurid();
                 } else {
+                    sammud.add(samm + "\t: Lisan tipu " + g.tipud.get(finalI).tähis + " järjekorda. VIGA");
+                    vead.add(samm++ + "\t: Järjekorda lisatava tipu sisendaste peaks olema 0 mitte " + olemas[g.tipud.get(finalI).tähis.charAt(0) - 'A']);
                     Teavitaja.teavita("Tipu %s sisendaste ei ole 0!".formatted(g.tipud.get(finalI).tähis), Alert.AlertType.INFORMATION);
                 }
             });
@@ -173,13 +179,15 @@ public class KahnKontroller {
         tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
             String kontrolliTulemus = kontrolli(tipp);
             if (kontrolliTulemus.equals("")) {
+                sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
                 tipp.tipp.setToodeldud();
                 toodeldud.add(tipp.tipp);
                 kuvaStruktuurid();
                 andmestruktuur.setDisable(false);
                 return;
             }
-            vead.add(kontrolliTulemus);
+            sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
+            vead.add(samm++ + "\t: " + kontrolliTulemus.replaceAll("\n", " "));
             Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
         });
     }
@@ -206,13 +214,14 @@ public class KahnKontroller {
     public void votaAndmestruktuurist(MouseEvent ignored) {
         if (jarjekord.isEmpty()) {
             if (toodeldud.size() == g.tipud.size()) {
-                Logija.logi(vead, g, sammud);
-                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi kirjutatud faili \"out.txt\"".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                Logija.logi(vead, g, sammud, "Kahn", false, false);
+                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                andmestruktuur.setDisable(true);
             }
-            andmestruktuur.setDisable(true);
             return;
         }
         Tipp t = jarjekord.remove(0);
+        sammud.add(samm++ + "\t: Võtsin järjekorrast järgmise tipu " + t.tähis + ". KORRAS");
         kuvaStruktuurid();
         t.setPraegune();
         andmestruktuur.setDisable(true);
