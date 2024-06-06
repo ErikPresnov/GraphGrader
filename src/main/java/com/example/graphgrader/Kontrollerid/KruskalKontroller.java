@@ -22,7 +22,6 @@ import java.util.Optional;
 public class KruskalKontroller {
 
     public KaarteKuhi kuhi = new KaarteKuhi();
-    public List<Tipp> toodeldud = new ArrayList<>();
     public List<String> vead = new ArrayList<>(), sammud = new ArrayList<>();
     public Tipp[] esindajad;
     public int samm = 1;
@@ -30,7 +29,7 @@ public class KruskalKontroller {
     public Graaf g;
     public String failitee = "Graafid\\test2.txt";
     public Button andmestruktuur, lukustaNupp, laeNupp;
-    public HBox pseudoStruktuur, pseudoToodeldud;
+    public HBox pseudoStruktuur;
 
     public void laeGraaf(MouseEvent ignored) throws IOException {
         g = new Graaf(failitee, false);
@@ -48,13 +47,13 @@ public class KruskalKontroller {
             TippGraafil tippEkraanil = new TippGraafil(40, 40, 30, praeguneTipp);
             praeguneTipp.tippGraafil = tippEkraanil;
             praeguneTipp.setToodeldud();
-            graafiElement.getChildren().add(lisaTipuKasitleja(tippEkraanil));
+            graafiElement.getChildren().add(lisaTipuLiigutaja(tippEkraanil));
             for (Kaar k : praeguneTipp.kaared) if (k.algus.tähis.compareTo(k.lopp.tähis) < 0) kuhi.lisa(k);
         }
         uuenda();
     }
 
-    public Group lisaTipuKasitleja(TippGraafil tipp) {
+    public Group lisaTipuLiigutaja(TippGraafil tipp) {
         Text tekst = new Text(tipp.tipp.tähis);
         tipp.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
             if (e.getX() < graafiElement.getLayoutX() + 35) return;
@@ -84,9 +83,6 @@ public class KruskalKontroller {
             pseudoStruktuur.getChildren().add(new Text("\t %s%s:%d".formatted(t.algus.tähis, t.lopp.tähis, t.kaal)));
             pikkus += 6 + t.algus.tähis.length() + t.lopp.tähis.length() + String.valueOf(t.kaal).length();
         }
-
-        pseudoToodeldud.getChildren().clear();
-        for (Tipp t : toodeldud) pseudoToodeldud.getChildren().add(new Text("\t" + t.tähis));
     }
 
     public void lukustaGraaf(MouseEvent ignored) {

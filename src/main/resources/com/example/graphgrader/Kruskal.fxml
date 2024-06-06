@@ -15,8 +15,6 @@
     <Label layoutX="32.0" layoutY="56.0" text="Kuhi"/>
     <Button fx:id="andmestruktuur" layoutX="101.0" layoutY="54.0" text="Võta" onMouseClicked="#votaAndmestruktuurist"/>
     <HBox fx:id="pseudoStruktuur" layoutX="151.0" layoutY="56.0" prefHeight="100.0" prefWidth="482.0" />
-    <Label layoutX="32.0" layoutY="97.0" text="Töödeldud"/>
-    <HBox fx:id="pseudoToodeldud" layoutX="101.0" layoutY="97.0" prefHeight="100.0" prefWidth="469.0" />
 
     <Pane layoutX="670" layoutY="5">
         <Rectangle width="30" height="30" fill="red"/>
