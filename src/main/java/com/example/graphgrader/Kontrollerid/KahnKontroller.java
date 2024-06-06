@@ -105,7 +105,6 @@ public class KahnKontroller {
             if (paris[i] != olemas[i]) throw new RuntimeException();
     }
 
-
     public void laeGraaf(MouseEvent ignored) throws IOException {
         g = new Graaf(failitee, true);
         olemas = new int[g.tipud.size()];
@@ -130,7 +129,6 @@ public class KahnKontroller {
         }
         uuenda();
     }
-
 
     public Group lisaTipuKasitleja(TippGraafil tipp) {
         Text tekst = new Text(tipp.tipp.tähis);
