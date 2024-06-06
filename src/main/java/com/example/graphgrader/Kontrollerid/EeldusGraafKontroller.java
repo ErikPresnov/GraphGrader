@@ -10,9 +10,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -26,7 +28,9 @@ public class EeldusGraafKontroller {
     public int koguAeg, samm = 1;
     public List<String> vead = new ArrayList<>(), sammud = new ArrayList<>();
     public boolean edasi = true;
+    public Rectangle algus, lopp;
 
+    public GridPane tabel;
     public Pane graafiElement;
     public Graaf g;
     public String failitee = "Graafid\\test3.txt";
@@ -41,6 +45,7 @@ public class EeldusGraafKontroller {
         varaseimLoppOlemas = new boolean[g.tipud.size()];
         hilisemAlgusOlemas = new boolean[g.tipud.size()];
         naitaGraafi();
+        lopp.setFill(Color.RED);
         laeNupp.setVisible(false);
         lukustaNupp.setVisible(true);
     }
@@ -103,6 +108,8 @@ public class EeldusGraafKontroller {
     private void jargmine() {
         if (edasi) {
             if (g.tipud.get(g.tipud.size() - 1).seis == TipuSeis.PRAEGUNE) {
+                lopp.setFill(Color.WHITE);
+                algus.setFill(Color.RED);
                 kysiLoppu();
                 edasi = false;
             } else {
@@ -114,6 +121,7 @@ public class EeldusGraafKontroller {
         } else {
             if (g.tipud.get(0).seis == TipuSeis.PRAEGUNE) {
                 g.tipud.get(0).setToodeldud();
+                algus.setFill(Color.WHITE);
                 kysiKriitilised();
             } else {
                 int index = leiaPraegune();
