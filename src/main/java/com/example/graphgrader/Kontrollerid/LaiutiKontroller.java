@@ -25,7 +25,7 @@ public class LaiutiKontroller {
 
     public Pane graafiElement;
     public Graaf g;
-    public String failitee = "Graafid\\test2.txt";
+    public String failitee = "Graafid\\test2.txt";//GraafiValija.valiSuvaline("laiuti");
     public Button andmestruktuur, laeNupp, lukustaNupp;
     public HBox pseudoStruktuur, pseudoToodeldud;
     public int samm = 1;
@@ -47,28 +47,19 @@ public class LaiutiKontroller {
             praeguneTipp.tippGraafil = tippEkraanil;
             if (i == 0) praeguneTipp.setPraegune();
 
-            graafiElement.getChildren().add(lisaTipuKasitleja(tippEkraanil));
+            graafiElement.getChildren().add(lisaTipuLiigutaja(tippEkraanil));
         }
         uuenda();
     }
 
-    public void lisaKaareKasitleja(Arrow kaar) {
-        Kaar k = kaar.kaar;
-        kaar.setOnMouseClicked(e -> {
-            if (k.algus.seis == TipuSeis.PRAEGUNE && k.lopp.seis == TipuSeis.AVASTAMATA) {
-                jarjekord.add(k.lopp);
-                sammud.add(samm++ + "\t: Lisan tipu " + k.lopp.tähis + " järjekorda. KORRAS");
-                k.lopp.setAndmestruktuuris();
-                kuvaStruktuurid();
-            } else if (k.algus.seis == TipuSeis.PRAEGUNE && (k.lopp.seis == TipuSeis.ANDMESTRUKTUURIS || k.lopp.seis == TipuSeis.TÖÖDELDUD)) {
-                sammud.add(samm + "\t: Lisan tipu " + k.lopp.tähis + " järjekorda. VIGA");
-                vead.add(samm++ + "\t: Lõpptipp " + k.lopp.tähis + " on juba töödeldud või andmestruktuuris.");
-                Teavitaja.teavita("Lõpptipp " + k.lopp.tähis + " on juba töödeldud või andmestruktuuris.", Alert.AlertType.ERROR);
-            }
-        });
+    private Tipp leiaPraegune() {
+        for (Tipp tipp : g.tipud)
+            if (tipp.seis == TipuSeis.PRAEGUNE)
+                return tipp;
+        return null;
     }
 
-    public Group lisaTipuKasitleja(TippGraafil tipp) {
+    public Group lisaTipuLiigutaja(TippGraafil tipp) {
         Text tekst = new Text(tipp.tipp.tähis);
         tipp.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
             if (e.getX() < graafiElement.getLayoutX() + 35) return;
@@ -103,20 +94,43 @@ public class LaiutiKontroller {
     }
 
     public void lisaKontrollija(TippGraafil tipp) {
-        tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
-            String kontrolliTulemus = kontrolli(tipp);
-            if (kontrolliTulemus.equals("")) {
-                sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
-                tipp.tipp.setToodeldud();
-                if (toodeldud.contains(tipp.tipp)) return;
-                toodeldud.add(tipp.tipp);
-                kuvaStruktuurid();
-                andmestruktuur.setDisable(false);
-                return;
+        tipp.setOnMouseClicked(e -> {
+            if (tipp.tipp.seis == TipuSeis.PRAEGUNE) {
+                String kontrolliTulemus = kontrolli(tipp);
+                if (kontrolliTulemus.equals("")) {
+                    sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
+                    tipp.tipp.setToodeldud();
+                    if (toodeldud.contains(tipp.tipp)) return;
+                    toodeldud.add(tipp.tipp);
+                    kuvaStruktuurid();
+                    andmestruktuur.setDisable(false);
+                    return;
+                }
+                sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
+                vead.add(samm++ + "\t: " + kontrolliTulemus);
+                Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
+            } else {
+                Tipp praegune = leiaPraegune();
+                Tipp jarglane = null;
+                if (praegune == null) return;
+                for (Tipp t : praegune.alluvad) if (t == tipp.tipp) {jarglane = t;break;}
+                if (jarglane == null) {
+                    sammud.add(samm + "\t: Lisan tipu " + tipp.tipp.tähis + " järjekorda. VIGA");
+                    vead.add(samm++ + "\t: Lõpptipp " + tipp.tipp.tähis + " ei ole praeguse tipu järglane.");
+                    Teavitaja.teavita("Lõpptipp " + tipp.tipp.tähis + " ei ole praeguse tipu järglane.", Alert.AlertType.ERROR);
+                    return;
+                }
+                if (jarglane.seis == TipuSeis.AVASTAMATA) {
+                    jarjekord.add(jarglane);
+                    sammud.add(samm++ + "\t: Lisan tipu " + jarglane.tähis + " järjekorda. KORRAS");
+                    jarglane.setAndmestruktuuris();
+                    kuvaStruktuurid();
+                } else if (jarglane.seis == TipuSeis.ANDMESTRUKTUURIS || jarglane.seis == TipuSeis.TÖÖDELDUD) {
+                    sammud.add(samm + "\t: Lisan tipu " + jarglane.tähis + " järjekorda. VIGA");
+                    vead.add(samm++ + "\t: Lõpptipp " + jarglane.tähis + " on juba töödeldud või andmestruktuuris.");
+                    Teavitaja.teavita("Lõpptipp " + jarglane.tähis + " on juba töödeldud või andmestruktuuris.", Alert.AlertType.ERROR);
+                }
             }
-            sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
-            vead.add(samm++ + "\t: " + kontrolliTulemus);
-            Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
         });
     }
 
@@ -131,7 +145,6 @@ public class LaiutiKontroller {
                         k.lopp.tippGraafil.getCenterX(), k.lopp.tippGraafil.getCenterY(),
                         true, false, k
                 );
-                lisaKaareKasitleja(kaar);
                 kaared.add(kaar);
             }
         }
