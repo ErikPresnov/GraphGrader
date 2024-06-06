@@ -44,28 +44,12 @@ public class SygEesKontroller {
             praeguneTipp.tippGraafil = tippEkraanil;
             if (i == 0) praeguneTipp.setPraegune();
 
-            graafiElement.getChildren().add(lisaTipuKasitleja(tippEkraanil));
+            graafiElement.getChildren().add(lisaTipuLiigutaja(tippEkraanil));
         }
         uuenda();
     }
 
-    public void lisaKaareKasitleja(Arrow kaar) {
-        Kaar k = kaar.kaar;
-        kaar.setOnMouseClicked(e -> {
-            if (k.algus.seis == Tipp.TipuSeis.PRAEGUNE && (k.lopp.seis == Tipp.TipuSeis.ANDMESTRUKTUURIS || k.lopp.seis == Tipp.TipuSeis.AVASTAMATA)) {
-                magasin.add(k.lopp);
-                sammud.add(samm++ + "\t: Lisan tipu " + k.lopp.tähis + " magasini. KORRAS");
-                k.lopp.setAndmestruktuuris();
-                kuvaStruktuurid();
-            } else if (k.algus.seis == Tipp.TipuSeis.PRAEGUNE && k.lopp.seis == Tipp.TipuSeis.TÖÖDELDUD) {
-                sammud.add(samm + "\t: Lisan tipu " + k.lopp.tähis + " magasini. VIGA");
-                vead.add(samm++ + "\t: Tipp " + k.lopp.tähis + " on juba töödeldud.");
-                Teavitaja.teavita("Lõpptipp " + k.lopp.tähis + " on juba töödeldud.", Alert.AlertType.ERROR);
-            }
-        });
-    }
-
-    public Group lisaTipuKasitleja(TippGraafil tipp) {
+    public Group lisaTipuLiigutaja(TippGraafil tipp) {
         Text tekst = new Text(tipp.tipp.tähis);
         tipp.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
             if (e.getX() < graafiElement.getLayoutX() + 35) return;
@@ -110,20 +94,50 @@ public class SygEesKontroller {
     }
 
     public void lisaKontrollija(TippGraafil tipp) {
-        tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
-            String kontrolliTulemus = kontrolli(tipp);
-            if (kontrolliTulemus.equals("")) {
-                sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
-                toodeldud.add(tipp.tipp);
-                tipp.tipp.setToodeldud();
-                kuvaStruktuurid();
-                andmestruktuur.setDisable(false);
-                return;
+        tipp.setOnMouseClicked(e -> {
+            if (tipp.tipp.seis == Tipp.TipuSeis.PRAEGUNE) {
+                String kontrolliTulemus = kontrolli(tipp);
+                if (kontrolliTulemus.equals("")) {
+                    sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
+                    toodeldud.add(tipp.tipp);
+                    tipp.tipp.setToodeldud();
+                    kuvaStruktuurid();
+                    andmestruktuur.setDisable(false);
+                    return;
+                }
+                sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
+                vead.add(samm++ + "\t: " + kontrolliTulemus);
+                Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
+            } else {
+                Tipp praegune = leiaPraegune();
+                Tipp jarglane = null;
+                if (praegune == null) return;
+                for (Tipp t : praegune.alluvad) if (t == tipp.tipp) {jarglane = t;break;}
+                if (jarglane == null) {
+                    sammud.add(samm + "\t: Lisan tipu " + tipp.tipp.tähis + " magasini. VIGA");
+                    vead.add(samm++ + "\t: Lõpptipp " + tipp.tipp.tähis + " ei ole praeguse tipu järglane.");
+                    Teavitaja.teavita("Lõpptipp " + tipp.tipp.tähis + " ei ole praeguse tipu järglane.", Alert.AlertType.ERROR);
+                    return;
+                }
+                if (jarglane.seis == Tipp.TipuSeis.AVASTAMATA) {
+                    magasin.add(jarglane);
+                    sammud.add(samm++ + "\t: Lisan tipu " + jarglane.tähis + " magasini. KORRAS");
+                    jarglane.setAndmestruktuuris();
+                    kuvaStruktuurid();
+                } else if (jarglane.seis == Tipp.TipuSeis.ANDMESTRUKTUURIS || jarglane.seis == Tipp.TipuSeis.TÖÖDELDUD) {
+                    sammud.add(samm + "\t: Lisan tipu " + jarglane.tähis + " magasini. VIGA");
+                    vead.add(samm++ + "\t: Lõpptipp " + jarglane.tähis + " on juba töödeldud või andmestruktuuris.");
+                    Teavitaja.teavita("Lõpptipp " + jarglane.tähis + " on juba töödeldud või andmestruktuuris.", Alert.AlertType.ERROR);
+                }
             }
-            sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
-            vead.add(samm++ + "\t: " + kontrolliTulemus);
-            Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
         });
+    }
+
+    private Tipp leiaPraegune() {
+        for (Tipp tipp : g.tipud)
+            if (tipp.seis == Tipp.TipuSeis.PRAEGUNE)
+                return tipp;
+        return null;
     }
 
     public void uuenda() {
@@ -137,7 +151,6 @@ public class SygEesKontroller {
                         k.lopp.tippGraafil.getCenterX(), k.lopp.tippGraafil.getCenterY(),
                         true, false, k
                 );
-                lisaKaareKasitleja(kaar);
                 kaared.add(kaar);
             }
         }
