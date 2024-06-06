@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 
-// kuidas lõpetada? kasutaja peaks indikeerima, et parandusi ei toimunud ehk lõpp või automaatselt kinni?
 public class BFKontroller {
 
     public List<Kaar> kaarteJarjekord = new ArrayList<>();
@@ -56,12 +55,12 @@ public class BFKontroller {
             tippEkraanil.setFill(Color.WHITE);
             praeguneTipp.tippGraafil = tippEkraanil;
 
-            graafiElement.getChildren().add(lisaTipuKasitleja(tippEkraanil));
+            graafiElement.getChildren().add(lisaTipuLiigutaja(tippEkraanil));
         }
         uuenda();
     }
 
-    public Group lisaTipuKasitleja(TippGraafil tipp) {
+    public Group lisaTipuLiigutaja(TippGraafil tipp) {
         Text tekst = new Text(tipp.tipp.tähis);
         tipp.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
             if (e.getX() < graafiElement.getLayoutX() + 35) return;
@@ -104,10 +103,7 @@ public class BFKontroller {
         andmestruktuur.setDisable(false);
         kuvaStruktuurid();
 
-        for (Tipp t : g.tipud) {
-            t.tippGraafil.addEventFilter(MouseEvent.MOUSE_DRAGGED, MouseEvent::consume);
-            lisaKontrollija(t.tippGraafil);
-        }
+        for (Tipp t : g.tipud) t.tippGraafil.addEventFilter(MouseEvent.MOUSE_DRAGGED, MouseEvent::consume);
     }
 
     public void kysiSisendit(Kaar k, int oodatud) {
@@ -155,23 +151,6 @@ public class BFKontroller {
             }
         }
         return tulemus;
-    }
-
-
-    public void lisaKontrollija(TippGraafil tipp) {
-        tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
-            String kontrolliTulemus = kontrolli(tipp);
-            if (kontrolliTulemus.equals("")) {
-                sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
-                tipp.tipp.setToodeldud();
-                kuvaStruktuurid();
-                andmestruktuur.setDisable(false);
-                return;
-            }
-            sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
-            vead.add(samm++ + "\t: " + kontrolliTulemus);
-            Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
-        });
     }
 
     public void uuenda() {
@@ -236,15 +215,5 @@ public class BFKontroller {
         k.lopp.kaal = jargmineOodatud;
         k.arrow.setFill(Color.DARKGREY);
         kuvaStruktuurid();
-    }
-
-    public String kontrolli(TippGraafil t) {
-        Tipp tipp = t.tipp;
-        if (tipp.seis != TipuSeis.PRAEGUNE) return "Tipp %s ei ole praegu töödeldav".formatted(tipp.tähis);
-        for (Tipp alluv : tipp.alluvad)
-            if (alluv.seis != TipuSeis.ANDMESTRUKTUURIS && alluv.seis != TipuSeis.TÖÖDELDUD)
-                return "Kõik järglased ei ole töödeldud.";
-
-        return "";
     }
 }
