@@ -50,31 +50,9 @@ public class DijkstraKontroller {
             praeguneTipp.tippGraafil = tippEkraanil;
             if (i == 0) praeguneTipp.setPraegune();
             praeguneTipp.kaal = 0;
-            graafiElement.getChildren().add(lisaTipuKasitleja(tippEkraanil));
+            graafiElement.getChildren().add(lisaTipuLiigutaja(tippEkraanil));
         }
         uuenda();
-    }
-
-    public void lisaKaareKasitleja(Arrow kaar) {
-        Kaar k = kaar.kaar;
-        kaar.setOnMouseClicked(e -> {
-            if (k.algus.seis == TipuSeis.PRAEGUNE && k.lopp.seis == TipuSeis.AVASTAMATA) { // Uus tipp seega kuhja parandust ei saa olla
-                k.lopp.kaal = kysiSisendit(k, k.algus.kaal + k.kaal);
-                kuhi.lisa(k.lopp);
-                k.lopp.setAndmestruktuuris();
-            }
-            else if (k.algus.seis == TipuSeis.PRAEGUNE && k.lopp.seis == TipuSeis.ANDMESTRUKTUURIS) { // Mingi tipp teist korda, potentsiaalne kuhjaparandus
-                // Kaks juhtu, kui praegune kaal on vaiksem kui uus --> ei tee midagi
-                if (k.lopp.kaal < k.algus.kaal + k.kaal) { // sellisel juhul ootame sisendiks vana kaalu
-                    k.lopp.kaal = kysiSisendit(k, k.lopp.kaal);
-                } else if (k.algus.kaal + k.kaal < k.lopp.kaal) { // kui uus tee on parem kui vana siis tahame uuendada kaalu
-                    k.lopp.kaal = kysiSisendit(k, k.algus.kaal + k.kaal);
-                    kuhi.kuhjasta(); // Võtme parandus
-                }
-            }
-
-            kuvaStruktuurid();
-        });
     }
 
     public int kysiSisendit(Kaar k, int oodatud) {
@@ -104,7 +82,7 @@ public class DijkstraKontroller {
         return Integer.parseInt(sisend.get());
     }
 
-    public Group lisaTipuKasitleja(TippGraafil tipp) {
+    public Group lisaTipuLiigutaja(TippGraafil tipp) {
         Text tekst = new Text(tipp.tipp.tähis);
         tipp.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
             if (e.getX() < graafiElement.getLayoutX() + 35) return;
@@ -147,19 +125,48 @@ public class DijkstraKontroller {
 
     public void lisaKontrollija(TippGraafil tipp) {
         tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
-            String kontrolliTulemus = kontrolli(tipp);
-            if (kontrolliTulemus.equals("")) {
-                sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
-                toodeldud.add(tipp.tipp);
-                tipp.tipp.setToodeldud();
+            if (tipp.tipp.seis == TipuSeis.PRAEGUNE) {
+                String kontrolliTulemus = kontrolli(tipp);
+                if (kontrolliTulemus.equals("")) {
+                    sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
+                    toodeldud.add(tipp.tipp);
+                    tipp.tipp.setToodeldud();
+                    kuvaStruktuurid();
+                    andmestruktuuriNupp.setDisable(false);
+                    return;
+                }
+                sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
+                vead.add(samm++ + "\t: " + kontrolliTulemus);
+                Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
+            } else {
+                Tipp praegune = leiaPraegune();
+                if (praegune == null) return;
+                Kaar k = praegune.kaared.stream().filter(x -> x.lopp == tipp.tipp).findFirst().get();
+                if (tipp.tipp.seis == TipuSeis.AVASTAMATA) { // Uus tipp seega kuhja parandust ei saa olla
+                    tipp.tipp.kaal = kysiSisendit(k, praegune.kaal + k.kaal);
+                    kuhi.lisa(tipp.tipp);
+                    tipp.tipp.setAndmestruktuuris();
+                }
+                else if (k.lopp.seis == TipuSeis.ANDMESTRUKTUURIS) { // Mingi tipp teist korda, potentsiaalne kuhjaparandus
+                    // Kaks juhtu, kui praegune kaal on vaiksem kui uus --> ei tee midagi
+                    if (k.lopp.kaal < k.algus.kaal + k.kaal) { // sellisel juhul ootame sisendiks vana kaalu
+                        k.lopp.kaal = kysiSisendit(k, k.lopp.kaal);
+                    } else if (k.algus.kaal + k.kaal < k.lopp.kaal) { // kui uus tee on parem kui vana siis tahame uuendada kaalu
+                        k.lopp.kaal = kysiSisendit(k, k.algus.kaal + k.kaal);
+                        kuhi.kuhjasta(); // Võtme parandus
+                    }
+                }
+
                 kuvaStruktuurid();
-                andmestruktuuriNupp.setDisable(false);
-                return;
             }
-            sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
-            vead.add(samm++ + "\t: " + kontrolliTulemus);
-            Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
         });
+    }
+
+    private Tipp leiaPraegune() {
+        for (Tipp tipp : g.tipud)
+            if (tipp.seis == TipuSeis.PRAEGUNE)
+                return tipp;
+        return null;
     }
 
     public void uuenda() {
@@ -175,7 +182,6 @@ public class DijkstraKontroller {
                         k.lopp.tippGraafil.getCenterX(), k.lopp.tippGraafil.getCenterY(),
                         true, false, k
                 );
-                lisaKaareKasitleja(kaar);
                 kaared.add(kaar);
 
                 if (g.kaalutud)
