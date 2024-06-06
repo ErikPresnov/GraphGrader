@@ -16,6 +16,7 @@ public class Tipp {
     public TipuSeis seis = TipuSeis.AVASTAMATA;
     public int kaal;
     public int varaseimLopp = 0, hiliseimAlgus = 0;
+    public int x = 40, y = 40, syg = Integer.MAX_VALUE;
     public Tipp(String tähis) {
         this.tähis = tähis;
     }
