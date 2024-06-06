@@ -53,36 +53,6 @@ public class PrimKontroller {
         uuenda();
     }
 
-    public void lisaKaareKasitleja(Arrow kaar) {
-        Kaar k = kaar.kaar;
-        kaar.setOnMouseClicked(e -> {
-            if (k.algus.seis == Tipp.TipuSeis.PRAEGUNE && (k.lopp.seis == Tipp.TipuSeis.ANDMESTRUKTUURIS || k.lopp.seis == Tipp.TipuSeis.AVASTAMATA)) {
-                if (kuhi.sisaldab(k)) {
-                    sammud.add(samm + "\t: Lisan serva " + k + " järjekorda. VIGA");
-                    vead.add(samm++ + "\t: Serv on järjekorras juba olemas.");
-                    Teavitaja.teavita("Serva topelt lisamine", Alert.AlertType.ERROR);
-                    return;
-                }
-                sammud.add(samm++ + "\t: Lisan serva " + k + " järjekorda. KORRAS");
-                kuhi.lisa(k);
-                k.lopp.setAndmestruktuuris();
-                kaar.setFill(Color.ORANGE);
-                ootel.add(k);
-                for (Kaar k1 : k.lopp.kaared)
-                    if (k1.lopp == k.algus) {
-                        k1.arrow.setFill(Color.ORANGE);
-                        ootel.add(k1);
-                        break;
-                    }
-                kuvaStruktuurid();
-            } else if (k.algus.seis == Tipp.TipuSeis.PRAEGUNE && k.lopp.seis == Tipp.TipuSeis.TÖÖDELDUD) {
-                sammud.add(samm + "\t: Lisan serva " + kaar + " järjekorda. VIGA");
-                vead.add(samm++ + "\t: Serva lõpptipp " + k.lopp.tähis + " on juba töödeldud.");
-                Teavitaja.teavita("Serva lõpptipp on juba töödeldud.", Alert.AlertType.ERROR);
-            }
-        });
-    }
-
     public Group lisaTipuKasitleja(TippGraafil tipp) {
         Text tekst = new Text(tipp.tipp.tähis);
         tipp.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
@@ -129,19 +99,55 @@ public class PrimKontroller {
 
     public void lisaKontrollija(TippGraafil tipp) {
         tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
-            String kontrolliTulemus = kontrolli(tipp);
-            if (kontrolliTulemus.equals("")) {
-                sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
-                tipp.tipp.setToodeldud();
-                toodeldud.add(tipp.tipp);
-                kuvaStruktuurid();
-                andmestruktuur.setDisable(false);
-                return;
+            if (tipp.tipp.seis == Tipp.TipuSeis.PRAEGUNE) {
+                String kontrolliTulemus = kontrolli(tipp);
+                if (kontrolliTulemus.equals("")) {
+                    sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
+                    tipp.tipp.setToodeldud();
+                    toodeldud.add(tipp.tipp);
+                    kuvaStruktuurid();
+                    andmestruktuur.setDisable(false);
+                    return;
+                }
+                sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
+                vead.add(samm++ + "\t: " +  kontrolliTulemus);
+                Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
+            } else {
+                Tipp praegune = leiaPraegune();
+                if (praegune == null) return;
+                Kaar esimene = null, teine = null;
+                for (Kaar kaar : praegune.kaared) if (kaar.lopp == tipp.tipp) esimene = kaar;
+                for (Kaar kaar : tipp.tipp.kaared) if (kaar.lopp == praegune) teine = kaar;
+                if (tipp.tipp.seis == Tipp.TipuSeis.ANDMESTRUKTUURIS || tipp.tipp.seis == Tipp.TipuSeis.AVASTAMATA) {
+                    if (kuhi.sisaldab(esimene) || kuhi.sisaldab(teine)) {
+                        sammud.add(samm + "\t: Lisan serva " + esimene + " järjekorda. VIGA");
+                        vead.add(samm++ + "\t: Serv on järjekorras juba olemas.");
+                        Teavitaja.teavita("Serva topelt lisamine", Alert.AlertType.ERROR);
+                        return;
+                    }
+                    sammud.add(samm++ + "\t: Lisan serva " + esimene + " järjekorda. KORRAS");
+                    kuhi.lisa(esimene);
+                    tipp.tipp.setAndmestruktuuris();
+                    if (esimene == null || teine == null) return;
+                    esimene.arrow.setFill(Color.ORANGE);
+                    teine.arrow.setFill(Color.ORANGE);
+                    ootel.add(esimene);
+                    ootel.add(teine);
+                    kuvaStruktuurid();
+                } else if (tipp.tipp.seis == Tipp.TipuSeis.TÖÖDELDUD) {
+                    sammud.add(samm + "\t: Lisan serva " + esimene + " järjekorda. VIGA");
+                    vead.add(samm++ + "\t: Serva lõpptipp " + tipp.tipp.tähis + " on juba töödeldud.");
+                    Teavitaja.teavita("Serva lõpptipp on juba töödeldud.", Alert.AlertType.ERROR);
+                }
             }
-            sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
-            vead.add(samm++ + "\t: " +  kontrolliTulemus);
-            Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
         });
+    }
+
+    private Tipp leiaPraegune() {
+        for (Tipp tipp : g.tipud)
+            if (tipp.seis == Tipp.TipuSeis.PRAEGUNE)
+                return tipp;
+        return null;
     }
 
     public void uuenda() {
@@ -158,7 +164,6 @@ public class PrimKontroller {
                         true, true, k
                 );
                 k.arrow = kaar;
-                lisaKaareKasitleja(kaar);
                 kaared.add(kaar);
 
                 if (g.kaalutud)
