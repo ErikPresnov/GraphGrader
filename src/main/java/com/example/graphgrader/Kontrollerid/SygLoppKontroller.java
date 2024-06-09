@@ -4,7 +4,6 @@ import com.example.graphgrader.Graaf.*;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -117,7 +116,7 @@ public class SygLoppKontroller {
                 }
                 sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
                 vead.add(samm++ + "\t: " + kontrolliTulemus);
-                Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
+                Teavitaja.teavita(kontrolliTulemus, "Viga");
             } else {
                 Tipp praegune = leiaPraegune();
                 Tipp jarglane = null;
@@ -126,7 +125,7 @@ public class SygLoppKontroller {
                 if (jarglane == null) {
                     sammud.add(samm + "\t: Lisan tipu " + tipp.tipp.tähis + " magasini. VIGA");
                     vead.add(samm++ + "\t: Lõpptipp " + tipp.tipp.tähis + " ei ole praeguse tipu järglane.");
-                    Teavitaja.teavita("Lõpptipp " + tipp.tipp.tähis + " ei ole praeguse tipu järglane.", Alert.AlertType.ERROR);
+                    Teavitaja.teavita("Lõpptipp " + tipp.tipp.tähis + " ei ole praeguse tipu järglane.", "Viga");
                     return;
                 }
                 if (jarglane.seis == Tipp.TipuSeis.AVASTAMATA) {
@@ -138,7 +137,7 @@ public class SygLoppKontroller {
                 } else if (jarglane.seis == Tipp.TipuSeis.ANDMESTRUKTUURIS || jarglane.seis == Tipp.TipuSeis.TÖÖDELDUD) {
                     sammud.add(samm + "\t: Lisan tipu " + jarglane.tähis + " magasini. VIGA");
                     vead.add(samm++ + "\t: Lõpptipp " + jarglane.tähis + " on juba töödeldud või andmestruktuuris.");
-                    Teavitaja.teavita("Lõpptipp " + jarglane.tähis + " on juba töödeldud või andmestruktuuris.", Alert.AlertType.ERROR);
+                    Teavitaja.teavita("Lõpptipp " + jarglane.tähis + " on juba töödeldud või andmestruktuuris.", "Viga");
                 }
             }
         });
@@ -173,7 +172,7 @@ public class SygLoppKontroller {
         if (magasin.isEmpty()) {
             if (toodeldud.size() == g.tipud.size()) {
                 Logija.logi(vead, g, sammud, "SügavutiLõpp", false, false);
-                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), "Info");
             }
             andmestruktuur.setDisable(true);
             return;
@@ -182,7 +181,7 @@ public class SygLoppKontroller {
         if (t != null) {
             sammud.add(samm + "\t: Mingit tippu pidi praegu töötlema. VIGA");
             vead.add(samm++ + "\t: Tippu " + t.tähis + " pidi praegu töötlema.");
-            Teavitaja.teavita("Mingit tippu pidi praegu töötlema.", Alert.AlertType.ERROR);
+            Teavitaja.teavita("Mingit tippu pidi praegu töötlema.", "Viga");
             return;
         }
         t = magasin.remove(magasin.size() - 1);
@@ -201,15 +200,13 @@ public class SygLoppKontroller {
         if (s == Tipp.TipuSeis.PRAEGUNE) {
             // Esimest korda --> kas tipp jääb ootele?
             // Ükski alluv ei tohi olla avastamata
-            List<Tipp> alluvateKoopia = new ArrayList<>(tipp.alluvad);
+
             for (Tipp alluv : tipp.alluvad) {
-                if (alluv.seis == Tipp.TipuSeis.AVASTAMATA) {
+                if (alluv.seis == Tipp.TipuSeis.AVASTAMATA)
                     return "Järglane {%s} on töötlemata".formatted(alluv.tähis);
-                } else if (alluv.seis == Tipp.TipuSeis.TÖÖDELDUD || alluv.seis == Tipp.TipuSeis.OOTEL) {
-                    alluvateKoopia.remove(alluv);
-                }
+                else if (alluv.seis == Tipp.TipuSeis.TÖÖDELDUD || alluv.seis == Tipp.TipuSeis.OOTEL)
+                    return "Mingi alluv tipp on töötlemata.";
             }
-            //if (alluvateKoopia.size() != jarglased.size()) return "Mingi alluv tipp on töötlemata.";
         } else if (s == Tipp.TipuSeis.OOTEL) {
             // Teist korda --> kontrollime kas kõik järglased on töödeldud
             Tipp jargmineOotel = ootel.get(ootel.size() - 1);
