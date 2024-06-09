@@ -5,7 +5,6 @@ import com.example.graphgrader.Util.KaarteKuhi;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
@@ -120,7 +119,7 @@ public class KruskalKontroller {
     public void votaAndmestruktuurist(MouseEvent ignored) {
         if (kuhi.onTyhi()) {
             Logija.logi(vead, g, sammud, "Kruskal", true, false);
-            Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
+            Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), "Info");
             andmestruktuur.setDisable(true);
             return;
         }
@@ -134,7 +133,7 @@ public class KruskalKontroller {
         while (vastus != kasKuulub) {
             sammud.add(samm + "\t: Küsin kaare toesesse kuulmist. VIGA");
             vead.add(samm++ + "\t: Kaar " + min + (kasKuulub ? " peaks " : " ei peaks ") + "toesesse kuuluma.");
-            Teavitaja.teeTeavitus("Sain vale vastuse", Alert.AlertType.ERROR).showAndWait();
+            Teavitaja.teavita("Sain vale vastuse", "Viga");
             vastus = kysiSisendit();
         }
         sammud.add(samm++ + "\t: Küsin kaare " + min + " toesesse kuulmist. KORRAS");
@@ -182,7 +181,7 @@ public class KruskalKontroller {
                 korras = true;
                 tulemus = pos.contains(sisendiSisu);
             } else {
-                Teavitaja.teeTeavitus("Sisesta 'jah', 'ja', 'j', '1' või 'ei', 'e', '0'", Alert.AlertType.INFORMATION).showAndWait();
+                Teavitaja.teavita("Sisesta 'jah', 'ja', 'j', '1' või 'ei', 'e', '0'", "Info");
                 sisend = Optional.empty();
             }
         }

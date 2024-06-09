@@ -18,11 +18,11 @@
 
     <Pane layoutX="670" layoutY="5">
         <Rectangle width="30" height="30" fill="red"/>
-        <Label layoutX="35" layoutY="5" text="Ei kuulu toesesse (serv)"/>
+        <Label layoutX="35" layoutY="5" text="Ei kuulu toesesse"/>
     </Pane>
     <Pane layoutX="670" layoutY="55">
         <Rectangle width="30" height="30" fill="orange"/>
-        <Label layoutX="35" layoutY="5" text="Praegune (serv)"/>
+        <Label layoutX="35" layoutY="5" text="Praegune"/>
     </Pane>
     <Pane layoutX="670" layoutY="105">
         <Rectangle width="30" height="30" fill="green"/>
