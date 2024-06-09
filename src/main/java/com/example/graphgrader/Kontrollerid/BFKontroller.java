@@ -1,11 +1,9 @@
 package com.example.graphgrader.Kontrollerid;
 
 import com.example.graphgrader.Graaf.*;
-import com.example.graphgrader.Graaf.Tipp.TipuSeis;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
@@ -119,14 +117,14 @@ public class BFKontroller {
                     String kontrolliTulemus = "Tipu %s kaal peaks olema %d aga on %d".formatted(k.lopp.tähis, oodatud, Integer.parseInt(sisend.get()));
                     sammud.add(samm + "\t: Küsisin kaalu tipu " + k.lopp.tähis + " kohta. VIGA");
                     vead.add(samm++ + "\t: " + kontrolliTulemus);
-                    Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
+                    Teavitaja.teavita(kontrolliTulemus, "Viga");
                     sisend = Optional.empty();
                     continue;
                 }
                 sammud.add(samm++ + "\t: Küsisin kaalu tipu " + k.lopp.tähis + " kohta. KORRAS");
                 korras = true;
             } catch (NumberFormatException exception) {
-                Teavitaja.teeTeavitus("Sisesta number", Alert.AlertType.INFORMATION).showAndWait();
+                Teavitaja.teavita("Sisesta number", "Info");
                 sisend = Optional.empty();
             }
         }
@@ -146,7 +144,7 @@ public class BFKontroller {
                 korras = true;
                 tulemus = pos.contains(sisendiSisu);
             } else {
-                Teavitaja.teeTeavitus("Sisesta 'jah', 'ja', 'j', '1' või 'ei', 'e', '0'", Alert.AlertType.INFORMATION).showAndWait();
+                Teavitaja.teavita("Sisesta 'jah', 'ja', 'j', '1' või 'ei', 'e', '0'", "Info");
                 sisend = Optional.empty();
             }
         }
@@ -190,14 +188,14 @@ public class BFKontroller {
                 vead.add(samm++ + "\t: Ootasin " + vahetus + " aga sain " + kasutaja);
             }
             while (vahetus != kasutaja) {
-                Teavitaja.teeTeavitus("Vale vastus", Alert.AlertType.ERROR).showAndWait();
+                Teavitaja.teavita("Vale vastus", "Viga");
                 sammud.add(samm + "\t: Küsin lõpetamise kohta. VIGA");
                 vead.add(samm++ + "\t: Ootasin " + vahetus + " aga sain " + kasutaja);
                 kasutaja = !kysiSisendit();
             }
             if (!vahetus) {
                 Logija.logi(vead, g, sammud, "BF", true, false);
-                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), "Info");
                 andmestruktuur.setDisable(true);
                 return;
             }
