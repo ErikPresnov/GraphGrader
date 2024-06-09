@@ -31,34 +31,34 @@ public class MainController {
     @FXML
     public void initialize() {
         Laiuti.setOnSelectionChanged(e -> {
-            if (Laiuti.isSelected()) Teavitaja.teavita(laiuti, Alert.AlertType.INFORMATION);
+            if (Laiuti.isSelected()) Teavitaja.teavita(laiuti, "Info");
         });
         Sygavuti1.setOnSelectionChanged(e -> {
-            if (Sygavuti1.isSelected()) Teavitaja.teavita(syg1, Alert.AlertType.INFORMATION);
+            if (Sygavuti1.isSelected()) Teavitaja.teavita(syg1, "Info");
         });
         Sygavuti2.setOnSelectionChanged(e -> {
-            if (Sygavuti2.isSelected()) Teavitaja.teavita(syg2, Alert.AlertType.INFORMATION);
+            if (Sygavuti2.isSelected()) Teavitaja.teavita(syg2, "Info");
         });
         Prim.setOnSelectionChanged(e -> {
-            if (Prim.isSelected()) Teavitaja.teavita(prim, Alert.AlertType.INFORMATION);
+            if (Prim.isSelected()) Teavitaja.teavita(prim, "Info");
         });
         Kruskal.setOnSelectionChanged(e -> {
-            if (Kruskal.isSelected()) Teavitaja.teavita(kruskal, Alert.AlertType.INFORMATION);
+            if (Kruskal.isSelected()) Teavitaja.teavita(kruskal, "Info");
         });
         Dijkstra.setOnSelectionChanged(e -> {
-            if (Dijkstra.isSelected()) Teavitaja.teavita(dijkstra, Alert.AlertType.INFORMATION);
+            if (Dijkstra.isSelected()) Teavitaja.teavita(dijkstra, "Info");
         });
         FW.setOnSelectionChanged(e -> {
-            if (FW.isSelected()) Teavitaja.teavita(fw, Alert.AlertType.INFORMATION);
+            if (FW.isSelected()) Teavitaja.teavita(fw, "Info");
         });
         BF.setOnSelectionChanged(e -> {
-            if (BF.isSelected()) Teavitaja.teavita(bf, Alert.AlertType.INFORMATION);
+            if (BF.isSelected()) Teavitaja.teavita(bf, "Info");
         });
         Kahn.setOnSelectionChanged(e -> {
-            if (Kahn.isSelected()) Teavitaja.teavita(kahn, Alert.AlertType.INFORMATION);
+            if (Kahn.isSelected()) Teavitaja.teavita(kahn, "Info");
         });
         Eeldus.setOnSelectionChanged(e -> {
-            if (Eeldus.isSelected()) Teavitaja.teavita(eeldus, Alert.AlertType.INFORMATION);
+            if (Eeldus.isSelected()) Teavitaja.teavita(eeldus, "Info");
         });
     }
 }
