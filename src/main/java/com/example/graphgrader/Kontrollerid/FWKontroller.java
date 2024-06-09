@@ -6,7 +6,6 @@ import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
@@ -156,14 +155,14 @@ public class FWKontroller {
                     String kontrolliTulemus = "Tipu %s kaal peaks olema %d aga on %d".formatted(t.tähis, oodatud, Integer.parseInt(sisend.get()));
                     sammud.add(samm + "\t: Küsin tipu " + t.tähis + " kaalu. VIGA");
                     vead.add(samm++ + "\t: " + kontrolliTulemus);
-                    Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
+                    Teavitaja.teavita(kontrolliTulemus, "Viga");
                     sisend = Optional.empty();
                     continue;
                 }
                 sammud.add(samm++ + "\t: Küsin tipu " + t.tähis + " kaalu. KORRAS");
                 korras = true;
             } catch (NumberFormatException exception) {
-                Teavitaja.teeTeavitus("Sisesta number", Alert.AlertType.INFORMATION).showAndWait();
+                Teavitaja.teavita("Sisesta number", "Info");
                 sisend = Optional.empty();
             }
         }
@@ -188,7 +187,7 @@ public class FWKontroller {
 
                 if (toodeldud.size() == g.tipud.size()) {
                     Logija.logi(vead, g, sammud, "FW", true, false);
-                    Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                    Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), "Info");
                     return;
                 }
 
@@ -198,7 +197,7 @@ public class FWKontroller {
             }
             sammud.add(samm + "\t: Töötlen tippu " + tipp.tipp.tähis + ". VIGA");
             vead.add(samm++ + "\t: " + kontrolliTulemus);
-            Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
+            Teavitaja.teavita(kontrolliTulemus, "Viga");
         });
     }
 
@@ -229,7 +228,7 @@ public class FWKontroller {
     public String kontrolli(TippGraafil t) {
         if (t.tipp.seis != TipuSeis.PRAEGUNE) return "Ei ole praegu töödeldav tipp";
         if (tehtud != (g.tipud.size() - 2)*(g.tipud.size() - 1))
-                return "Midagi puudu";
+            return "Midagi puudu";
 
         tehtud = 0;
         return "";
