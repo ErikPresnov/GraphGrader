@@ -5,7 +5,6 @@ import com.example.graphgrader.Graaf.Tipp.TipuSeis;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -108,7 +107,7 @@ public class LaiutiKontroller {
                 }
                 sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
                 vead.add(samm++ + "\t: " + kontrolliTulemus);
-                Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
+                Teavitaja.teavita(kontrolliTulemus, "Viga");
             } else {
                 Tipp praegune = leiaPraegune();
                 Tipp jarglane = null;
@@ -117,7 +116,7 @@ public class LaiutiKontroller {
                 if (jarglane == null) {
                     sammud.add(samm + "\t: Lisan tipu " + tipp.tipp.tähis + " järjekorda. VIGA");
                     vead.add(samm++ + "\t: Lõpptipp " + tipp.tipp.tähis + " ei ole praeguse tipu järglane.");
-                    Teavitaja.teavita("Lõpptipp " + tipp.tipp.tähis + " ei ole praeguse tipu järglane.", Alert.AlertType.ERROR);
+                    Teavitaja.teavita("Lõpptipp " + tipp.tipp.tähis + " ei ole praeguse tipu järglane.", "Viga");
                     return;
                 }
                 if (jarglane.seis == TipuSeis.AVASTAMATA) {
@@ -128,7 +127,7 @@ public class LaiutiKontroller {
                 } else if (jarglane.seis == TipuSeis.ANDMESTRUKTUURIS || jarglane.seis == TipuSeis.TÖÖDELDUD) {
                     sammud.add(samm + "\t: Lisan tipu " + jarglane.tähis + " järjekorda. VIGA");
                     vead.add(samm++ + "\t: Lõpptipp " + jarglane.tähis + " on juba töödeldud või andmestruktuuris.");
-                    Teavitaja.teavita("Lõpptipp " + jarglane.tähis + " on juba töödeldud või andmestruktuuris.", Alert.AlertType.ERROR);
+                    Teavitaja.teavita("Lõpptipp " + jarglane.tähis + " on juba töödeldud või andmestruktuuris.", "Viga");
                 }
             }
         });
@@ -156,7 +155,7 @@ public class LaiutiKontroller {
         if (jarjekord.isEmpty()) {
             if (toodeldud.size() == g.tipud.size()) {
                 Logija.logi(vead, g, sammud, "Laiuti", false, false);
-                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), "Info");
             }
             andmestruktuur.setDisable(true);
             return;
