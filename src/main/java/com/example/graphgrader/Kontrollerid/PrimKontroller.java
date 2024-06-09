@@ -5,7 +5,6 @@ import com.example.graphgrader.Util.KaarteKuhi;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -111,7 +110,7 @@ public class PrimKontroller {
                 }
                 sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
                 vead.add(samm++ + "\t: " +  kontrolliTulemus);
-                Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
+                Teavitaja.teavita(kontrolliTulemus, "Viga");
             } else {
                 Tipp praegune = leiaPraegune();
                 if (praegune == null) return;
@@ -122,7 +121,7 @@ public class PrimKontroller {
                     if (kuhi.sisaldab(esimene) || kuhi.sisaldab(teine)) {
                         sammud.add(samm + "\t: Lisan serva " + esimene + " järjekorda. VIGA");
                         vead.add(samm++ + "\t: Serv on järjekorras juba olemas.");
-                        Teavitaja.teavita("Serva topelt lisamine", Alert.AlertType.ERROR);
+                        Teavitaja.teavita("Serva topelt lisamine", "Viga");
                         return;
                     }
                     sammud.add(samm++ + "\t: Lisan serva " + esimene + " järjekorda. KORRAS");
@@ -137,7 +136,7 @@ public class PrimKontroller {
                 } else if (tipp.tipp.seis == Tipp.TipuSeis.TÖÖDELDUD) {
                     sammud.add(samm + "\t: Lisan serva " + esimene + " järjekorda. VIGA");
                     vead.add(samm++ + "\t: Serva lõpptipp " + tipp.tipp.tähis + " on juba töödeldud.");
-                    Teavitaja.teavita("Serva lõpptipp on juba töödeldud.", Alert.AlertType.ERROR);
+                    Teavitaja.teavita("Serva lõpptipp on juba töödeldud.", "Viga");
                 }
             }
         });
@@ -179,7 +178,7 @@ public class PrimKontroller {
         if (kuhi.onTyhi()) {
             if (toodeldud.size() == g.tipud.size()) {
                 Logija.logi(vead, g, sammud, "Prim", true, false);
-                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), "Info");
             }
             andmestruktuur.setDisable(true);
             return;
