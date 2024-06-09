@@ -2,7 +2,6 @@ package com.example.graphgrader.Kontrollerid;
 
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 
 public class MainController {
