@@ -5,7 +5,6 @@ import com.example.graphgrader.Graaf.Tipp.TipuSeis;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
@@ -157,7 +156,7 @@ public class EeldusGraafKontroller {
                     String kontrolliTulemus = "Sellist tippu ei eksisteeri.";
                     sammud.add(samm + "\t: Küsin kriitilist tippu. VIGA");
                     vead.add(samm++ + "\t: " + kontrolliTulemus);
-                    Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
+                    Teavitaja.teavita(kontrolliTulemus, "Viga");
                     sisend = Optional.empty();
                 } else if (!kriitilised.contains(t)) {
                     String kontrolliTulemus;
@@ -165,7 +164,7 @@ public class EeldusGraafKontroller {
                     else kontrolliTulemus = "Sisestatud tipp ei ole kriitiline.";
                     sammud.add(samm + "\t: Küsin kriitilist tippu. VIGA");
                     vead.add(samm++ + "\t: " + kontrolliTulemus);
-                    Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
+                    Teavitaja.teavita(kontrolliTulemus, "Viga");
                     sisend = Optional.empty();
                 } else {
                     sammud.add(samm + "\t: Küsin kriitilist tippu. KORRAS");
@@ -178,7 +177,7 @@ public class EeldusGraafKontroller {
             }
         }
         Logija.logi(vead, g, sammud, "Eeldusgraaf", false, true);
-        Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
+        Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), "Info");
     }
 
     private void kysiLoppu() {
@@ -194,14 +193,14 @@ public class EeldusGraafKontroller {
                     String kontrolliTulemus = "Kogu lõpuaeg peaks olema %d aga sisestati %s".formatted(koguAeg, Integer.parseInt(sisend.get()));
                     sammud.add(samm + "\t: Küsin kogu lõpuaega. VIGA");
                     vead.add(samm++ + "\t: " + kontrolliTulemus);
-                    Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
+                    Teavitaja.teavita(kontrolliTulemus, "Viga");
                     sisend = Optional.empty();
                     continue;
                 }
                 sammud.add(samm + "\t: Küsin kogu lõpuaega. KORRAS");
                 korras = true;
             } catch (NumberFormatException exception) {
-                Teavitaja.teeTeavitus("Sisesta number", Alert.AlertType.INFORMATION).showAndWait();
+                Teavitaja.teavita("Sisesta number", "Info");
                 sisend = Optional.empty();
             }
         }
@@ -236,14 +235,14 @@ public class EeldusGraafKontroller {
                     String kontrolliTulemus = "Tipu %s %s peaks olema %d aga on %d".formatted(t.tähis, mida, oodatud, Integer.parseInt(sisend.get()));
                     sammud.add(samm + "\t: Küsin tipu " + t.tähis + " " + mida + ". VIGA");
                     vead.add(samm++ + "\t: " + kontrolliTulemus);
-                    Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
+                    Teavitaja.teavita(kontrolliTulemus, "Viga");
                     sisend = Optional.empty();
                     continue;
                 }
                 korras = true;
                 sammud.add(samm++ + "\t: Küsin tipu " + t.tähis + " " + mida + ". KORRAS");
             } catch (NumberFormatException exception) {
-                Teavitaja.teeTeavitus("Sisesta number", Alert.AlertType.INFORMATION).showAndWait();
+                Teavitaja.teavita("Sisesta number", "Info");
                 sisend = Optional.empty();
             }
         }
@@ -273,7 +272,7 @@ public class EeldusGraafKontroller {
             String error = sobib(sisendiSisu);
             if (error != null) {
                 String kontrolliTulemus = "Sisestus ei ole sobiv topoloogiline jarjestus";
-                Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
+                Teavitaja.teavita(kontrolliTulemus, "Viga");
                 sammud.add(samm + "\t: Küsin topolooglist järjestust. VIGA");
                 vead.add(samm++ + "\t: " + kontrolliTulemus);
                 sisend = Optional.empty();
