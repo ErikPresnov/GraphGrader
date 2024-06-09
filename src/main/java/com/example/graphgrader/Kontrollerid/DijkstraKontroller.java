@@ -6,7 +6,6 @@ import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import com.example.graphgrader.Util.TippudeKuhi;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
@@ -68,14 +67,14 @@ public class DijkstraKontroller {
                     String kontrolliTulemus = "Tipu %s kaal peaks olema %d aga on %d".formatted(k.lopp.tähis, oodatud, Integer.parseInt(sisend.get()));
                     sammud.add(samm + "\t: Küsisin kaalu tipu " + k.lopp.tähis + " kohta. VIGA");
                     vead.add(samm++ + "\t: " + kontrolliTulemus);
-                    Teavitaja.teeTeavitus(kontrolliTulemus, Alert.AlertType.ERROR).showAndWait();
+                    Teavitaja.teavita(kontrolliTulemus, "Viga");
                     sisend = Optional.empty();
                     continue;
                 }
                 sammud.add(samm++ + "\t: Küsisin kaalu tipu " + k.lopp.tähis + " kohta. KORRAS");
                 korras = true;
             } catch (NumberFormatException exception) {
-                Teavitaja.teeTeavitus("Sisesta number", Alert.AlertType.INFORMATION).showAndWait();
+                Teavitaja.teavita("Sisesta number", "Info");
                 sisend = Optional.empty();
             }
         }
@@ -137,7 +136,7 @@ public class DijkstraKontroller {
                 }
                 sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
                 vead.add(samm++ + "\t: " + kontrolliTulemus);
-                Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
+                Teavitaja.teavita(kontrolliTulemus, "Viga");
             } else {
                 Tipp praegune = leiaPraegune();
                 if (praegune == null) return;
@@ -197,7 +196,7 @@ public class DijkstraKontroller {
         if (kuhi.onTyhi()) {
             if (toodeldud.size() == g.tipud.size()) {
                 Logija.logi(vead, g, sammud, "Dijkstra", true, false);
-                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi kirjutatud faili \"out.txt\"".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi kirjutatud faili \"out.txt\"".formatted(vead.size()), "Info");
             }
             andmestruktuuriNupp.setDisable(true);
             return;
