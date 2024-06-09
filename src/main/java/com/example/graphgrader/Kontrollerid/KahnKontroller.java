@@ -4,7 +4,6 @@ import com.example.graphgrader.Graaf.*;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -43,7 +42,7 @@ public class KahnKontroller {
             } catch (RuntimeException e) {
                 sammud.add(samm + "\t: Kontrollin algseid sisendastmeid. VIGA");
                 vead.add(samm++ + "\t: Ootasin: " + Arrays.toString(paris) + " , sain: " + Arrays.toString(olemas));
-                Teavitaja.teavita("Sisendastmed on vigased", Alert.AlertType.INFORMATION);
+                Teavitaja.teavita("Sisendastmed on vigased", "Info");
             }
         });
         tabel.add(kontrollNupp, 0, 0, 2, 1);
@@ -60,7 +59,7 @@ public class KahnKontroller {
             Button alla = new Button("-");
             alla.setOnMouseClicked(e -> {
                 if (olemas[finalI] == 0) {
-                    Teavitaja.teavita("Tipu sisendaste ei saa olla negatiivne", Alert.AlertType.ERROR);
+                    Teavitaja.teavita("Tipu sisendaste ei saa olla negatiivne", "Viga");
                     return;
                 }
                 olemas[finalI]--;
@@ -89,7 +88,7 @@ public class KahnKontroller {
                 } else {
                     sammud.add(samm + "\t: Lisan tipu " + g.tipud.get(finalI).tähis + " järjekorda. VIGA");
                     vead.add(samm++ + "\t: Järjekorda lisatava tipu sisendaste peaks olema 0 mitte " + olemas[g.tipud.get(finalI).tähis.charAt(0) - 'A']);
-                    Teavitaja.teavita("Tipu %s sisendaste ei ole 0!".formatted(g.tipud.get(finalI).tähis), Alert.AlertType.INFORMATION);
+                    Teavitaja.teavita("Tipu %s sisendaste ei ole 0!".formatted(g.tipud.get(finalI).tähis), "Info");
                 }
             });
             lisa.setPrefWidth(40);
@@ -186,7 +185,7 @@ public class KahnKontroller {
             }
             sammud.add(samm + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". VIGA");
             vead.add(samm++ + "\t: " + kontrolliTulemus.replaceAll("\n", " "));
-            Teavitaja.teavita(kontrolliTulemus, Alert.AlertType.ERROR);
+            Teavitaja.teavita(kontrolliTulemus, "Viga");
         });
     }
 
@@ -213,7 +212,7 @@ public class KahnKontroller {
         if (jarjekord.isEmpty()) {
             if (toodeldud.size() == g.tipud.size()) {
                 Logija.logi(vead, g, sammud, "Kahn", false, false);
-                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), Alert.AlertType.INFORMATION);
+                Teavitaja.teavita("Läbimäng tehtud!\nKokku %d viga.\nLogi faili kirjutatud.".formatted(vead.size()), "Info");
                 andmestruktuur.setDisable(true);
             }
             return;
