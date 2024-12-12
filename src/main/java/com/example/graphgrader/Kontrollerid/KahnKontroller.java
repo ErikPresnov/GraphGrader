@@ -1,6 +1,7 @@
 package com.example.graphgrader.Kontrollerid;
 
 import com.example.graphgrader.Graaf.*;
+import com.example.graphgrader.Util.GraafiValija;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.scene.Group;
@@ -25,7 +26,7 @@ public class KahnKontroller {
 
     public Pane graafiElement;
     public Graaf g;
-    public String failitee = "Graafid\\test3.txt";
+    public String failitee = GraafiValija.valiSuvaline("graafid/suunatud");
     public Button laeNupp, andmestruktuur, lukustaNupp;
     public HBox pseudoStruktuur, pseudoToodeldud;
     public int samm = 1;
@@ -226,7 +227,7 @@ public class KahnKontroller {
     }
 
     public String kontrolli(TippGraafil t) {
-        if (t.tipp.seis != Tipp.TipuSeis.PRAEGUNE) return "Tipp " + t.tipp.tähis + " ei ole praegu töödeldav.";
+        if (t.tipp.seis != TipuSeis.PRAEGUNE) return "Tipp " + t.tipp.tähis + " ei ole praegu töödeldav.";
         try {
             t.tipp.setToodeldud();
             kontrolliMassiive();

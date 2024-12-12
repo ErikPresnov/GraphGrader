@@ -1,7 +1,7 @@
 package com.example.graphgrader.Kontrollerid;
 
 import com.example.graphgrader.Graaf.*;
-import com.example.graphgrader.Graaf.Tipp.TipuSeis;
+import com.example.graphgrader.Util.GraafiValija;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.scene.Group;
@@ -32,7 +32,7 @@ public class EeldusGraafKontroller {
     public GridPane tabel;
     public Pane graafiElement;
     public Graaf g;
-    public String failitee = "Graafid\\test3.txt";
+    public String failitee = GraafiValija.valiSuvaline("graafid/eeldusgraaf");
     public Button laeNupp, lukustaNupp, andmestruktuur;
 
     public HBox pseudoStruktuur, pseudoToodeldud;

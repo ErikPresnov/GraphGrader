@@ -1,6 +1,7 @@
 package com.example.graphgrader.Kontrollerid;
 
 import com.example.graphgrader.Graaf.*;
+import com.example.graphgrader.Util.GraafiValija;
 import com.example.graphgrader.Util.KaarteKuhi;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
@@ -26,7 +27,7 @@ public class KruskalKontroller {
     public int samm = 1;
     public Pane graafiElement;
     public Graaf g;
-    public String failitee = "Graafid\\test2.txt";
+    public String failitee = GraafiValija.valiSuvaline("graafid/suunatud_kaalutud");
     public Button andmestruktuur, lukustaNupp, laeNupp;
     public HBox pseudoStruktuur;
 

@@ -1,6 +1,7 @@
 package com.example.graphgrader.Kontrollerid;
 
 import com.example.graphgrader.Graaf.*;
+import com.example.graphgrader.Util.GraafiValija;
 import com.example.graphgrader.Util.KaarteKuhi;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
@@ -25,7 +26,7 @@ public class PrimKontroller {
 
     public Pane graafiElement;
     public Graaf g;
-    public String failitee = "Graafid\\test2.txt";
+    public String failitee = GraafiValija.valiSuvaline("graafid/suunatud");
     public Button andmestruktuur, laeNupp, lukustaNupp;
     public HBox pseudoStruktuur, pseudoToodeldud;
     public int samm = 1;
@@ -98,7 +99,7 @@ public class PrimKontroller {
 
     public void lisaKontrollija(TippGraafil tipp) {
         tipp.setOnMouseClicked(e -> { // Klikk ehk kontrollimine
-            if (tipp.tipp.seis == Tipp.TipuSeis.PRAEGUNE) {
+            if (tipp.tipp.seis == TipuSeis.PRAEGUNE) {
                 String kontrolliTulemus = kontrolli(tipp);
                 if (kontrolliTulemus.equals("")) {
                     sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
@@ -117,7 +118,7 @@ public class PrimKontroller {
                 Kaar esimene = null, teine = null;
                 for (Kaar kaar : praegune.kaared) if (kaar.lopp == tipp.tipp) esimene = kaar;
                 for (Kaar kaar : tipp.tipp.kaared) if (kaar.lopp == praegune) teine = kaar;
-                if (tipp.tipp.seis == Tipp.TipuSeis.ANDMESTRUKTUURIS || tipp.tipp.seis == Tipp.TipuSeis.AVASTAMATA) {
+                if (tipp.tipp.seis == TipuSeis.ANDMESTRUKTUURIS || tipp.tipp.seis == TipuSeis.AVASTAMATA) {
                     if (kuhi.sisaldab(esimene) || kuhi.sisaldab(teine)) {
                         sammud.add(samm + "\t: Lisan serva " + esimene + " järjekorda. VIGA");
                         vead.add(samm++ + "\t: Serv on järjekorras juba olemas.");
@@ -133,7 +134,7 @@ public class PrimKontroller {
                     ootel.add(esimene);
                     ootel.add(teine);
                     kuvaStruktuurid();
-                } else if (tipp.tipp.seis == Tipp.TipuSeis.TÖÖDELDUD) {
+                } else if (tipp.tipp.seis == TipuSeis.TÖÖDELDUD) {
                     sammud.add(samm + "\t: Lisan serva " + esimene + " järjekorda. VIGA");
                     vead.add(samm++ + "\t: Serva lõpptipp " + tipp.tipp.tähis + " on juba töödeldud.");
                     Teavitaja.teavita("Serva lõpptipp on juba töödeldud.", "Viga");
@@ -144,7 +145,7 @@ public class PrimKontroller {
 
     private Tipp leiaPraegune() {
         for (Tipp tipp : g.tipud)
-            if (tipp.seis == Tipp.TipuSeis.PRAEGUNE)
+            if (tipp.seis == TipuSeis.PRAEGUNE)
                 return tipp;
         return null;
     }
@@ -186,7 +187,7 @@ public class PrimKontroller {
         Kaar min = kuhi.min();
         sammud.add(samm++ + "\t: Võtsin järjekorrast järgmise kaare " + min + ". KORRAS");
         kuvaStruktuurid();
-        if (min.lopp.seis == Tipp.TipuSeis.TÖÖDELDUD) return;
+        if (min.lopp.seis == TipuSeis.TÖÖDELDUD) return;
         min.arrow.setFill(Color.GREEN);
         min.lopp.setPraegune();
         kasutatud.add(min);
@@ -202,8 +203,8 @@ public class PrimKontroller {
 
     public String kontrolli(TippGraafil t) {
         Tipp tipp = t.tipp;
-        if (tipp.seis == Tipp.TipuSeis.TÖÖDELDUD) return "Tipp {%s} on töödeldud".formatted(tipp.tähis);
-        if (tipp.seis != Tipp.TipuSeis.PRAEGUNE) return "Tipp {%s} ei ole praegu töödeldav".formatted(tipp.tähis);
+        if (tipp.seis == TipuSeis.TÖÖDELDUD) return "Tipp {%s} on töödeldud".formatted(tipp.tähis);
+        if (tipp.seis != TipuSeis.PRAEGUNE) return "Tipp {%s} ei ole praegu töödeldav".formatted(tipp.tähis);
         for (Kaar kaar : tipp.kaared)
             if (!ootel.contains(kaar) && !kasutatud.contains(kaar))
                 return "Järglane {%s} ei ole töödeldud ega andmestruktuuris".formatted(kaar.lopp.tähis);

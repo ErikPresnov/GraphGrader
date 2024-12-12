@@ -1,7 +1,7 @@
 package com.example.graphgrader.Kontrollerid;
 
 import com.example.graphgrader.Graaf.*;
-import com.example.graphgrader.Graaf.Tipp.TipuSeis;
+import com.example.graphgrader.Util.GraafiValija;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.geometry.Insets;
@@ -25,11 +25,11 @@ public class FWKontroller {
 
     public List<Tipp> toodeldud = new ArrayList<>();
     public List<String> vead = new ArrayList<>(), sammud = new ArrayList<>();
-     int[][] seis;
+    int[][] seis;
 
     public Pane graafiElement;
     public Graaf g;
-    public String failitee = "Graafid\\test2.txt";
+    public String failitee = GraafiValija.valiSuvaline("graafid/suunatud_kaalutud");;
     public HBox pseudoToodeldud;
 
     public Button lukustaNupp, laeNupp;

@@ -1,6 +1,7 @@
 package com.example.graphgrader.Kontrollerid;
 
 import com.example.graphgrader.Graaf.*;
+import com.example.graphgrader.Util.GraafiValija;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.scene.Group;
@@ -25,7 +26,7 @@ public class BFKontroller {
 
     public Pane graafiElement;
     public Graaf g;
-    public String failitee = "Graafid\\test2.txt";
+    public String failitee = GraafiValija.valiSuvaline("graafid/suunatud_kaalutud");
     public Button andmestruktuur, laeNupp, lukustaNupp;
     public HBox pseudoStruktuur, pseudoToodeldud;
     public int samm = 1;

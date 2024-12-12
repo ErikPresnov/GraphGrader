@@ -1,8 +1,9 @@
 package com.example.graphgrader.Kontrollerid;
 
 import com.example.graphgrader.Graaf.*;
-import com.example.graphgrader.Graaf.Tipp.TipuSeis;
+import com.example.graphgrader.Util.GraafiValija;
 import com.example.graphgrader.Util.Logija;
+import com.example.graphgrader.Util.Märgendaja;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -24,7 +25,7 @@ public class LaiutiKontroller {
 
     public Pane graafiElement;
     public Graaf g;
-    public String failitee = "Graafid\\test2.txt";//GraafiValija.valiSuvaline("laiuti");
+    public String failitee = GraafiValija.valiSuvaline("graafid/suunatud");
     public Button andmestruktuur, laeNupp, lukustaNupp;
     public HBox pseudoStruktuur, pseudoToodeldud;
     public int samm = 1;
@@ -60,6 +61,8 @@ public class LaiutiKontroller {
 
     public Group lisaTipuLiigutaja(TippGraafil tipp) {
         Text tekst = new Text(tipp.tipp.tähis);
+        tekst.setX(tipp.getCenterX() - 3);
+        tekst.setY(tipp.getCenterY() + 3);
         tipp.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
             if (e.getX() < graafiElement.getLayoutX() + 35) return;
             if (e.getX() > graafiElement.getLayoutX() + graafiElement.getWidth() - 35) return;

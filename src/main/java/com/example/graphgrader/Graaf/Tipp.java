@@ -7,8 +7,6 @@ import java.util.List;
 
 public class Tipp {
 
-    public enum TipuSeis {AVASTAMATA, ANDMESTRUKTUURIS, PRAEGUNE, TÖÖDELDUD, OOTEL}
-
     public String tähis;
     public TippGraafil tippGraafil;
     public List<Tipp> alluvad = new ArrayList<>();
@@ -16,7 +14,7 @@ public class Tipp {
     public TipuSeis seis = TipuSeis.AVASTAMATA;
     public int kaal;
     public int varaseimLopp = 0, hiliseimAlgus = 0;
-    public int x = 40, y = 40, syg = Integer.MAX_VALUE;
+    public int x = 40, y = 40, syg = -1;
     public Tipp(String tähis) {
         this.tähis = tähis;
     }

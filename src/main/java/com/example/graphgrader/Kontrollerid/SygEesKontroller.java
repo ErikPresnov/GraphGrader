@@ -1,6 +1,7 @@
 package com.example.graphgrader.Kontrollerid;
 
 import com.example.graphgrader.Graaf.*;
+import com.example.graphgrader.Util.GraafiValija;
 import com.example.graphgrader.Util.Logija;
 import com.example.graphgrader.Util.Teavitaja;
 import javafx.scene.Group;
@@ -21,7 +22,7 @@ public class SygEesKontroller {
 
     public Pane graafiElement;
     public Graaf g;
-    public String failitee = "Graafid\\test2.txt";
+    public String failitee = GraafiValija.valiSuvaline("graafid/suunatud");
     public Button andmestruktuur, laeNupp, lukustaNupp;
     public HBox pseudoStruktuur, pseudoToodeldud;
     public int samm = 1;
@@ -94,7 +95,7 @@ public class SygEesKontroller {
 
     public void lisaKontrollija(TippGraafil tipp) {
         tipp.setOnMouseClicked(e -> {
-            if (tipp.tipp.seis == Tipp.TipuSeis.PRAEGUNE) {
+            if (tipp.tipp.seis == TipuSeis.PRAEGUNE) {
                 String kontrolliTulemus = kontrolli(tipp);
                 if (kontrolliTulemus.equals("")) {
                     sammud.add(samm++ + "\t: Kontrollin tippu " + tipp.tipp.tähis + ". KORRAS");
@@ -118,12 +119,12 @@ public class SygEesKontroller {
                     Teavitaja.teavita("Lõpptipp " + tipp.tipp.tähis + " ei ole praeguse tipu järglane.", "Viga");
                     return;
                 }
-                if (jarglane.seis == Tipp.TipuSeis.AVASTAMATA) {
+                if (jarglane.seis == TipuSeis.AVASTAMATA) {
                     magasin.add(jarglane);
                     sammud.add(samm++ + "\t: Lisan tipu " + jarglane.tähis + " magasini. KORRAS");
                     jarglane.setAndmestruktuuris();
                     kuvaStruktuurid();
-                } else if (jarglane.seis == Tipp.TipuSeis.ANDMESTRUKTUURIS || jarglane.seis == Tipp.TipuSeis.TÖÖDELDUD) {
+                } else if (jarglane.seis == TipuSeis.ANDMESTRUKTUURIS || jarglane.seis == TipuSeis.TÖÖDELDUD) {
                     sammud.add(samm + "\t: Lisan tipu " + jarglane.tähis + " magasini. VIGA");
                     vead.add(samm++ + "\t: Lõpptipp " + jarglane.tähis + " on juba töödeldud või andmestruktuuris.");
                     Teavitaja.teavita("Lõpptipp " + jarglane.tähis + " on juba töödeldud või andmestruktuuris.", "Viga");
@@ -134,7 +135,7 @@ public class SygEesKontroller {
 
     private Tipp leiaPraegune() {
         for (Tipp tipp : g.tipud)
-            if (tipp.seis == Tipp.TipuSeis.PRAEGUNE)
+            if (tipp.seis == TipuSeis.PRAEGUNE)
                 return tipp;
         return null;
     }
@@ -168,16 +169,16 @@ public class SygEesKontroller {
         }
         Tipp t = magasin.remove(magasin.size() - 1);
         sammud.add(samm++ + "\t: Võtsin magasinist järgmise tipu " + t.tähis + ". KORRAS");
-        if (t.seis != Tipp.TipuSeis.TÖÖDELDUD) t.setPraegune();
-        if (t.seis != Tipp.TipuSeis.TÖÖDELDUD) andmestruktuur.setDisable(true);
+        if (t.seis != TipuSeis.TÖÖDELDUD) t.setPraegune();
+        if (t.seis != TipuSeis.TÖÖDELDUD) andmestruktuur.setDisable(true);
         kuvaStruktuurid();
     }
 
     public String kontrolli(TippGraafil t) {
         Tipp tipp = t.tipp;
-        if (tipp.seis != Tipp.TipuSeis.PRAEGUNE) return "Tipp %s ei ole praegu töödeldav".formatted(tipp.tähis);
+        if (tipp.seis != TipuSeis.PRAEGUNE) return "Tipp %s ei ole praegu töödeldav".formatted(tipp.tähis);
         for (Tipp alluv : tipp.alluvad)
-            if (alluv.seis != Tipp.TipuSeis.ANDMESTRUKTUURIS && alluv.seis != Tipp.TipuSeis.TÖÖDELDUD)
+            if (alluv.seis != TipuSeis.ANDMESTRUKTUURIS && alluv.seis != TipuSeis.TÖÖDELDUD)
                 return "Kõik järglased ei ole töödeldud.";
 
         return "";
